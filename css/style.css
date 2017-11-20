@@ -24,7 +24,6 @@ del,
 p,
 blockquote,
 fieldset,
-input,
 textarea,
 select,
 article,
@@ -37,10 +36,15 @@ header,
 hgroup,
 nav,
 section,
-button,
 canvas,
 video {
     margin: 0;
+    padding: 0;
+}
+
+button,
+input{
+    margin: 5px;
     padding: 0;
 }
 
@@ -241,7 +245,7 @@ img {
 
 #benefits1,
 #benefits2 { font-size: 14px; }
- 
+
 } @media (max-width: 767px) {
 
 .img-block-2col { text-align: center; }
@@ -929,7 +933,7 @@ footer {
 .discover-content {
     float: right;
     width: 50%;
-    padding: 77px 97px 50px 15px;
+    padding: 0px 97px 0px 15px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -1011,7 +1015,7 @@ footer {
 
 /* ===[ Responsive all mobile sizes ]=== */
 
-@media (max-width: 979px) { 
+@media (max-width: 979px) {
   .newsletter-form {
       min-width: 0
   }
@@ -1155,7 +1159,7 @@ footer {
 
 /* ===[ Responsive just mobile portrait ]=== */
 
-@media (max-width: 479px) { 
+@media (max-width: 479px) {
   header .buttons-wrapper .button.button-stripe {
       margin-left: 0
   }
@@ -1166,7 +1170,7 @@ footer {
   }
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) { 
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
   .comments .tab-prev,
   .comments .tab-next,
   .button-download:after,
