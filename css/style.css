@@ -924,6 +924,18 @@ footer {
     background-color: #ac241e
 }
 
+.social-list li a.social-instagram {
+    background-color: #8a3ab9;
+}
+
+.social-list li a.social-instagram:hover {
+    background-color: #bc2a8d
+}
+
+.social-list li a.social-instagram:active {
+    background-color: #4c68d7
+}
+
 .discover {
     padding: 31px 0 25px;
     background: #fafafa;
