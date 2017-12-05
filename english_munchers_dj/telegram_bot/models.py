@@ -1,6 +1,7 @@
 import telegram
 
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 
 from decouple import config
@@ -27,7 +28,7 @@ def send_msg_group(sender, instance, created, **kwargs):
 
     if created:
         button_list = [
-            telegram.InlineKeyboardButton('Take it!', callback_data='I take him!')
+            telegram.InlineKeyboardButton('Take it!', callback_data='I take him! ClassRequest ID: %d' % instance.id)
         ]
 
         reply_markup = telegram.InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
@@ -36,3 +37,6 @@ def send_msg_group(sender, instance, created, **kwargs):
 
 post_save.connect(send_msg_group, sender=ClassRequest)
 
+class UpdateResponse(models.Model):
+    class_request_id = models.IntegerField()
+    update_dict = JSONField()
