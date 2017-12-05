@@ -28,12 +28,7 @@ class ClassRequest(models.Model):
     time = models.CharField(max_length=8, choices=TIME_CHOICES, default='open')
     preferred_im = models.CharField(max_length=16, choices=IM_CHOICES, default='whatsapp')
     ip_address = models.GenericIPAddressField()
-    created_on = models.DateTimeField(editable=False, blank=True, null=True)
+    created_on = models.DateTimeField(editable=False, auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.created = timezone.now()
-        return super(ClassRequest, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return ' '.join([self.name, self.phone_number, self.created_on])
+    def __str__(self):
+        return ' '.join([str(self.id), self.name, self.ip_address])
