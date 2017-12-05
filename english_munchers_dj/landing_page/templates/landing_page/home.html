@@ -142,19 +142,60 @@
             <div class="newsletter clearfix" id="contact">
                 <div class="wrap">
                     <div class="newsletter-title">Start Conversation</div>
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
                     <div class="form-div clearfix">
-                        <form action="" class="form">
-                            <input type="text" placeholder="Your name" class="input-text">
-                            <input type="tel" id="phone" placeholder="Phone Number" class="input-text">
-                            <input type="email" placeholder="Email address (opcional)" class="input-text">
-                            <select class="input-text" style="margin: 5px;">
+
+                        <form action="" method="POST" class="form">
+                            {% csrf_token %}
+                            <input id="id_name" name="name" type="text" placeholder="Your name" class="input-text"
+                                value="{{ form.name.value|default_if_none:"" }}">
+                            {% if form.name.errors %}
+                                {% for error in form.name.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+
+                            <input id="id_phone_number" name="phone_number" type="text" placeholder="Phone Number" class="input-text"
+                                value="{{ form.phone_number.value|default_if_none:"" }}">
+                            {% if form.phone_number.errors %}
+                                {% for error in form.phone_number.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                            <input id="id_email" name="email" type="text" placeholder="Email address (opcional)" class="input-text"
+                                value="{{ form.email.value|default_if_none:"" }}">
+                            {% if form.email.errors %}
+                                {% for error in form.email.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                            <select id="id_time" name="time" class="input-text" style="margin: 5px;"
+                                value="{{ form.time.value|default_if_none:""}}">
+                                <option value="open">Open Time</option>
                                 <option value="15">15 minutes</option>
                                 <option value="30">30 minutes</option>
                                 <option value="45">45 minutes</option>
                                 <option value="60">1 hour</option>
-                                <option value="open">Open Time</option>
                             </select>
-                            <select class="input-text" style="margin: 5px;">
+                            <select id="id_preferred_im" name="preferred_im" class="input-text" style="margin: 5px;"
+                                value="{{ form.preferred_im.value|default_if_none:""}}">
                                 <option value="">Select your Preferred IM</option>
                                 <option value="whatsapp">WhatsAPP</option>
                                 <option value="telegram">Telegram</option>
@@ -244,7 +285,7 @@
     <script src="{% static 'landing_page/js/intlTelInput.js' %}"></script>
 
     <script>
-      $("#phone").intlTelInput({
+      $("#id_phone_number").intlTelInput({
           initialCountry: "auto",
           geoIpLookup: function(callback) {
             $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {

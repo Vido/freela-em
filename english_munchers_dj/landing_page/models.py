@@ -24,13 +24,16 @@ class ClassRequest(models.Model):
         message="Phone Number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
     country = models.CharField(max_length=32)
-    email = models.EmailField()
+    email = models.EmailField(blank=True, null=True)
     time = models.CharField(max_length=8, choices=TIME_CHOICES, default='open')
     preferred_im = models.CharField(max_length=16, choices=IM_CHOICES, default='whatsapp')
     ip_address = models.GenericIPAddressField()
-    created_on = models.DateTimeField(editable=False)
+    created_on = models.DateTimeField(editable=False, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = timezone.now()
         return super(ClassRequest, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return ' '.join([self.name, self.phone_number, self.created_on])
