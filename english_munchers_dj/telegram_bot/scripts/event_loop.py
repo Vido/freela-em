@@ -1,9 +1,6 @@
-import sys, os, django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "english_munchers_dj.settings")
-django.setup()
-
 import re
 import telegram
+import sys, os, django
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -96,6 +93,7 @@ def send_contact_private():
             else:
                 send_contact(class_request_obj, user_id, dict_update)
 
-if __name__ == '__main__':
+def run():
     # Cron
+    print('send_contact_private()')
     send_contact_private()
