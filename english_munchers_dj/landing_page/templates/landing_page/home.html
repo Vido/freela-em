@@ -86,16 +86,22 @@
                     <div class="discover-content clearfix">
                         <h2>How it Works</h2>
                         <p>You Complete Your Information</p>
-                        <p>Click On The Number of Minutes the User Wants</p>
+                        <p>Click On The Number of Minutes you Want</p>
                         <ul style="margin-top: 1rem; list-style: square; margin-left: 1rem">
                             <li>15 minutes - <strong>R$ 10</strong></li>
                             <li>30 minutes - <strong>R$ 20</strong></li>
                             <li>45 minutes - <strong>R$ 30</strong></li>
                             <li>60 minutes - <strong>R$ 40</strong></li>
-                            <li>Open tTime - charged by the minute, starting at 15 minutes</li>
+                            <li>Open Time - charged by the minute, starting at 15 minutes</li>
                         </ul>
-                        <p style="margin-top: 1rem;">Once you submit your request, a teacher will contact you within <strong>3 minutes</strong> using one of the IM apps shown below.</p>
-                        <p><i class="fa fa-whatsapp fa-2x" style="color: #25d366"></i> <i class="fa fa-telegram fa-2x" style="color: #0088cc"></i> <i class="fa fa-skype fa-2x" style="color: #00aff0"></i></p>
+                        <p style="margin-top: 1rem;">Once you submit your
+                        request, a teacher will contact you within<br><strong>3
+                            minutes</strong> using one of the IM apps shown below:</p>
+                        <hr>
+                        <p style="text-align: center;">
+                            <i class="fa fa-whatsapp fa-4x fa-fw" style="color: #25d366"></i>
+                            <i class="fa fa-telegram fa-4x fa-fw" style="color: #0088cc"></i>
+                        </p>
                         <!--
                         <div class="discover-button clearfix">
                             <a href="#" class="button button-download">
@@ -153,7 +159,7 @@
 
                     <div class="form-div clearfix">
 
-                        <form action="" method="POST" class="form">
+                        <form action="#contact" method="POST" class="form">
                             {% csrf_token %}
                             <input id="id_name" name="name" type="text" placeholder="Your name" class="input-text"
                                 value="{{ form.name.value|default_if_none:"" }}">

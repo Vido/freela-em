@@ -14,6 +14,8 @@ bot = telegram.Bot(telegram_api_key)
 
 def send_msg_group(sender, instance, created, **kwargs):
 
+    print('send_msg_group()')
+
     def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
         menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
         if header_buttons:
