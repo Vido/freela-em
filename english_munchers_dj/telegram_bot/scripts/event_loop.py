@@ -32,17 +32,34 @@ def send_contact(class_request_obj, user_id, update_dict):
 
     except Exception as e:
         print('Exception', e)
-        help_text = '@%s In order to receive the contact click on the bot`s private chat and click "Start"' % update_dict['callback_query']['from']['username']
+
+        _from = update_dict['callback_query']['from']
+        if 'username' in _from:
+            username = '@' + _from['username']
+        elif 'first_name' in _from:
+            username = _from['first_name']
+        else:
+            username = ''
+
+        help_text = '%s In order to receive the contact click on the bot`s private chat and click "Start"' % username
         bot.send_message(chat_id=chat_id, text=help_text)
         return
+
+    _from = update_dict['callback_query']['from']
+    if 'username' in _from:
+        username = '@' + _from['username']
+    elif 'first_name' in _from:
+        username = _from['first_name']
+    else:
+        username = ''
 
     UpdateResponse.objects.create(
             class_request_id=class_request_obj.pk,
             update_dict=update_dict)
 
     #edit
-    taken_msg = 'Student %s was avalible for %s minutes... But @%s took it.' % (
-            class_request_obj.name, class_request_obj.time, update_dict['callback_query']['from']['username'])
+    taken_msg = 'Student %s was avalible for %s minutes... But %s took it.' % (
+            class_request_obj.name, class_request_obj.time, username)
     message_id=update_dict['callback_query']['message']['message_id']
     bot.editMessageText(chat_id=chat_id, message_id=message_id, text=taken_msg)
     bot.editMessageReplyMarkup(chat_id=chat_id, message_id=message_id)
@@ -51,15 +68,32 @@ def warn_contact_taken(class_request_obj, user_id, update_dict, last_update_resp
     """
     """
     try:
+
+        _from = last_update_response.update_dict['callback_query']['from']
+        update_dict['callback_query']['from']
+        if 'username' in _from:
+            username = '@' + _from['username']
+        elif 'first_name' in _from:
+            username = _from['first_name']
+        else:
+            username = ''
+
         msg_str = 'Too late! %s was already taken by @%s' % (
-                class_request_obj.name,
-                last_update_response.update_dict['callback_query']['from']['username'])
+                class_request_obj.name, username)
         bot.send_message(chat_id=user_id, text=msg_str)
 
     except Exception as e:
         print('Exception', e)
-        help_text = '@%s In order to receive the contact click on the bot`s private chat and click "Start"' % (
-                update_dict['callback_query']['from']['username'])
+
+        _from = update_dict['callback_query']['from']
+        if 'username' in _from:
+            username = '@' + _from['username']
+        elif 'first_name' in _from:
+            username = _from['first_name']
+        else:
+            username = ''
+
+        help_text = '%s In order to receive the contact click on the bot`s private chat and click "Start"' % username
         bot.send_message(chat_id=chat_id, text=help_text)
 
 def send_contact_private():
