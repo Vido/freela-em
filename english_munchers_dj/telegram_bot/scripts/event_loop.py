@@ -54,7 +54,8 @@ def warn_contact_taken(class_request_obj, user_id, update_dict, last_update_resp
     """
     """
 
-    print('warn_contact_taken()')
+    print('warn_contact_taken() - Disabled')
+    return
 
     try:
         username = get_username(update_dict)
