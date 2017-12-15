@@ -78,7 +78,7 @@ def send_contact_private():
 
     for update in bot.getUpdates(offset=last_update_id):
         dict_update = update.to_dict()
-        print('update_id', dict_update.update_dict['update_id'])
+        print('update_id', dict_update['update_id'])
 
         if 'callback_query' in dict_update:
             match = regex_request_id.match(dict_update['callback_query']['data'])
