@@ -72,10 +72,13 @@ def warn_contact_taken(class_request_obj, user_id, update_dict, last_update_resp
 def send_contact_private():
 
     print('START - send_contact_private()')
+    last_response = UpdateResponse.objects.order_by('-pk')[0]
+    last_update_id = last_response.update_dict['update_id']
+    print('last_update_id', last_update_id)
 
-    for update in bot.getUpdates():
+    for update in bot.getUpdates(offset=last_update_id):
         dict_update = update.to_dict()
-        #print(dict_update)
+        print('update_id', dict_update.update_dict['update_id'])
 
         if 'callback_query' in dict_update:
             match = regex_request_id.match(dict_update['callback_query']['data'])
@@ -84,7 +87,7 @@ def send_contact_private():
 
             #print('request_id: ', request_id)
             #print('user_id: ', user_id)
-            #print('from:', dict_update['callback_query']['from'])
+            print('callback i from:', dict_update['callback_query']['from'])
 
             class_request_obj = ClassRequest.objects.get(pk=request_id)
             update_response = UpdateResponse.objects.filter(class_request_id=request_id)
@@ -132,7 +135,7 @@ def send_contact_private():
 
 def run():
     # Cron
-    for i in range(5):
+    for i in range(4):
         print('Date now: %s' % datetime.datetime.now())
         send_contact_private()
-        time.sleep(10)
+        time.sleep(15)
