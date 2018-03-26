@@ -34,7 +34,7 @@ def send_msg_group(sender, instance, created, **kwargs):
         ]
 
         reply_markup = telegram.InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
-        msg_str = 'Student %s is avalible for %s minutes!' % (instance.name, instance.time)
+        msg_str = 'Student %s is available for %s minutes!' % (instance.name, instance.time)
         bot.send_message(chat_id=chat_id, text=msg_str, reply_markup=reply_markup)
 
 post_save.connect(send_msg_group, sender=ClassRequest)

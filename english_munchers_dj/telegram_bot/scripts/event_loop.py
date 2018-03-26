@@ -10,12 +10,22 @@ from django.db.models.signals import post_save
 from decouple import config
 
 from landing_page.models import ClassRequest
+from landing_page.models import ClassInfo
 from telegram_bot.models import UpdateResponse
 
 chat_id = config('TELEGRAM_CHAT_ID', cast=int)
 telegram_api_key = config('TELEGRAM_API_KEY')
 bot = telegram.Bot(telegram_api_key)
 regex_request_id = re.compile(r'I take him! ClassRequest ID: (\d+)')
+
+# TODO: Fallback value
+def safeget(dct, *keys):
+    for key in keys:
+        try:
+            dct = dct[key]
+        except KeyError:
+            return None
+    return dct
 
 def get_username(update_dict):
     _from = update_dict['callback_query']['from']
@@ -32,7 +42,7 @@ def send_contact(class_request_obj, user_id, update_dict):
     """
     """
     try:
-        msg_str = 'Student %s is avalible for %s minutes. Please contact via %s' % (
+        msg_str = 'Student %s is available for %s minutes. Please contact via %s' % (
                 class_request_obj.name,
                 class_request_obj.time,
                 class_request_obj.preferred_im)
@@ -42,6 +52,9 @@ def send_contact(class_request_obj, user_id, update_dict):
                 phone_number=class_request_obj.phone_number,
                 first_name=class_request_obj.name,
                 parse_mode="Markdown", disable_web_page_preview=True)
+
+        # Cria Class Request
+        ClassInfo.objects.create(class_request=class_request_obj, chat_id)
 
     except Exception as e:
         print('Exception', e)
@@ -69,73 +82,86 @@ def warn_contact_taken(class_request_obj, user_id, update_dict, last_update_resp
         help_text = '%s In order to receive the contact click on the bot`s private chat and click "Start"' % username
         bot.send_message(chat_id=chat_id, text=help_text)
 
-def send_contact_private():
+def send_contact_private(dict_update):
 
-    print('START - send_contact_private()')
-    last_response = UpdateResponse.objects.order_by('-pk')[0]
-    last_update_id = last_response.update_dict['update_id']
-    print('last_update_id', last_update_id)
+    print('update_id', dict_update['update_id'])
+    print(safeget(dict_update, 'message', 'chat', 'title'))
 
-    for update in bot.getUpdates(offset=last_update_id):
-        dict_update = update.to_dict()
-        print('update_id', dict_update['update_id'])
+    if 'callback_query' in dict_update:
+        match = regex_request_id.match(dict_update['callback_query']['data'])
+        request_id = match.group(1)
+        user_id = dict_update['callback_query']['from']['id']
 
-        if 'callback_query' in dict_update:
-            match = regex_request_id.match(dict_update['callback_query']['data'])
-            request_id = match.group(1)
-            user_id = dict_update['callback_query']['from']['id']
+        #print('request_id: ', request_id)
+        #print('user_id: ', user_id)
+        print('callback i from:', dict_update['callback_query']['from'])
 
-            #print('request_id: ', request_id)
-            #print('user_id: ', user_id)
-            print('callback i from:', dict_update['callback_query']['from'])
+        class_request_obj = ClassRequest.objects.get(pk=request_id)
+        update_response = UpdateResponse.objects.filter(class_request_id=request_id)
 
-            class_request_obj = ClassRequest.objects.get(pk=request_id)
-            update_response = UpdateResponse.objects.filter(class_request_id=request_id)
+        if update_response.exists():
+            for update_obj in update_response:
+                print('update_response.exists()')
+                first_taker_id = update_obj.update_dict['callback_query']['from']['id']
+                taker_id = dict_update['callback_query']['from']['id']
+                if not first_taker_id == taker_id:
+                    print('warn_contact_taken()')
+                    warn_contact_taken(class_request_obj,
+                                   user_id,
+                                   dict_update,
+                                   update_obj)
+                #edit
+                print('Edit')
+                print(update_obj.update_dict)
+                username = get_username(update_obj.update_dict)
+                taken_msg = 'Student %s was available for %s minutes... But %s took it.' % (
+                        class_request_obj.name, class_request_obj.time, username)
+                message_id=dict_update['callback_query']['message']['message_id']
 
-            if update_response.exists():
-                for update_obj in update_response:
-                    print('update_response.exists()')
-                    first_taker_id = update_obj.update_dict['callback_query']['from']['id']
-                    taker_id = dict_update['callback_query']['from']['id']
-                    if not first_taker_id == taker_id:
-                        print('warn_contact_taken()')
-                        warn_contact_taken(class_request_obj,
-                                       user_id,
-                                       dict_update,
-                                       update_obj)
-                    #edit
-                    print('Edit')
-                    print(update_obj.update_dict)
-                    username = get_username(update_obj.update_dict)
-                    taken_msg = 'Student %s was avalible for %s minutes... But %s took it.' % (
-                            class_request_obj.name, class_request_obj.time, username)
-                    message_id=dict_update['callback_query']['message']['message_id']
+                try:
+                    # Change txt
+                    bot.editMessageText(chat_id=chat_id, message_id=message_id, text=taken_msg)
+                except Exception as e:
+                    print(e)
 
-                    try:
-                        bot.editMessageText(chat_id=chat_id, message_id=message_id, text=taken_msg)
-                    except Exception as e:
-                        print(e)
-
-                    try:
-                        bot.editMessageReplyMarkup(chat_id, message_id=message_id, reply_markup=None)
-                    except Exception as e:
-                        print(e)
+                try:
+                    # Remove bottons
+                    bot.editMessageReplyMarkup(chat_id, message_id=message_id, reply_markup=None)
+                except Exception as e:
+                    print(e)
 
 
-            else:
-                print('send_contact_private()')
-                send_contact(class_request_obj, user_id, dict_update)
-                username = get_username(dict_update)
+        else:
+            print('send_contact_private()')
+            send_contact(class_request_obj, user_id, dict_update)
+            username = get_username(dict_update)
 
-                UpdateResponse.objects.create(
-                        class_request_id=class_request_obj.pk,
-                        update_dict=dict_update)
+            UpdateResponse.objects.create(
+                    class_request_id=class_request_obj.pk,
+                    update_dict=dict_update)
 
+def ask_charge_private():
+    # Query time
 
+    qs_cinfo = ClassInfo.objects.filter(q1_sent__is_null=True)
+    for cinfo in qs_cinfo:
+        pass
+        #ask
 
 def run():
     # Cron
     for i in range(4):
         print('Date now: %s' % datetime.datetime.now())
-        send_contact_private()
+        #send_contact_private()
+
+        print('START - send_contact_private()')
+        last_response = UpdateResponse.objects.order_by('-pk')[0]
+        last_update_id = last_response.update_dict['update_id']
+        print('last_update_id', last_update_id)
+
+        for update in bot.getUpdates(offset=last_update_id):
+            dict_update = update.to_dict()
+            send_contact_private(dict_update)
+            ask_charge_private()
+
         time.sleep(15)

@@ -32,3 +32,17 @@ class ClassRequest(models.Model):
 
     def __str__(self):
         return ' '.join([str(self.id), self.name, self.ip_address])
+
+
+class ClassInfo(models.Model):
+    class_resquest = models.ForeignKey(ClassRequest, on_delete=models.CASCADE)
+    pvt_send_timestamp = models.DateTimeField(editable=False, auto_now_add=True)
+    teacher = models.CharField(max_length=128, default='')
+    chat_id = models.Integer(default=0)
+
+    q1_sent = models.DateTimeField(editable=False, blank=True, null=True)
+    success = models.NullBooleanField(default=True)
+
+    # TODO
+    # Why not
+    # prof
