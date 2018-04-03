@@ -13,6 +13,10 @@ from landing_page.models import ClassRequest
 from landing_page.models import ClassInfo
 from telegram_bot.models import UpdateResponse
 
+from .utils import edit_bots_mgs
+from .confirm_class import ask_charge_private
+from .confirm_class import get_charge_response
+
 chat_id = config('TELEGRAM_CHAT_ID', cast=int)
 telegram_api_key = config('TELEGRAM_API_KEY')
 bot = telegram.Bot(telegram_api_key)
@@ -37,7 +41,6 @@ def get_username(update_dict):
         username = ''
     return username
 
-
 def send_contact(class_request_obj, user_id, update_dict):
     """
     """
@@ -54,7 +57,9 @@ def send_contact(class_request_obj, user_id, update_dict):
                 parse_mode="Markdown", disable_web_page_preview=True)
 
         # Cria Class Request
-        ClassInfo.objects.create(class_request=class_request_obj, chat_id)
+        ClassInfo.objects.create(
+                class_request=class_request_obj,
+                chat_id=user_id)
 
     except Exception as e:
         print('Exception', e)
@@ -84,19 +89,30 @@ def warn_contact_taken(class_request_obj, user_id, update_dict, last_update_resp
 
 def send_contact_private(dict_update):
 
+    print('send_contact_private')
     print('update_id', dict_update['update_id'])
     print(safeget(dict_update, 'message', 'chat', 'title'))
 
     if 'callback_query' in dict_update:
-        match = regex_request_id.match(dict_update['callback_query']['data'])
-        request_id = match.group(1)
-        user_id = dict_update['callback_query']['from']['id']
 
+        match = regex_request_id.match(dict_update['callback_query']['data'])
+        try:
+            request_id = match.group(1)
+        except AttributeError as e:
+            print("[N/A] send_contact_private")
+            return
+
+        user_id = dict_update['callback_query']['from']['id']
         #print('request_id: ', request_id)
         #print('user_id: ', user_id)
-        print('callback i from:', dict_update['callback_query']['from'])
+        print('callback from:', dict_update['callback_query']['from'])
 
-        class_request_obj = ClassRequest.objects.get(pk=request_id)
+        try:
+            class_request_obj = ClassRequest.objects.get(pk=request_id)
+        except ClassRequest.DoesNotExist as e:
+            print(e)
+            return
+
         update_response = UpdateResponse.objects.filter(class_request_id=request_id)
 
         if update_response.exists():
@@ -118,18 +134,9 @@ def send_contact_private(dict_update):
                         class_request_obj.name, class_request_obj.time, username)
                 message_id=dict_update['callback_query']['message']['message_id']
 
-                try:
-                    # Change txt
-                    bot.editMessageText(chat_id=chat_id, message_id=message_id, text=taken_msg)
-                except Exception as e:
-                    print(e)
-
-                try:
-                    # Remove bottons
-                    bot.editMessageReplyMarkup(chat_id, message_id=message_id, reply_markup=None)
-                except Exception as e:
-                    print(e)
-
+                # Change txt
+                # Remove bottons
+                edit_bots_mgs(bot, chat_id, message_id, taken_msg)
 
         else:
             print('send_contact_private()')
@@ -140,21 +147,12 @@ def send_contact_private(dict_update):
                     class_request_id=class_request_obj.pk,
                     update_dict=dict_update)
 
-def ask_charge_private():
-    # Query time
-
-    qs_cinfo = ClassInfo.objects.filter(q1_sent__is_null=True)
-    for cinfo in qs_cinfo:
-        pass
-        #ask
-
 def run():
     # Cron
     for i in range(4):
         print('Date now: %s' % datetime.datetime.now())
         #send_contact_private()
 
-        print('START - send_contact_private()')
         last_response = UpdateResponse.objects.order_by('-pk')[0]
         last_update_id = last_response.update_dict['update_id']
         print('last_update_id', last_update_id)
@@ -163,5 +161,6 @@ def run():
             dict_update = update.to_dict()
             send_contact_private(dict_update)
             ask_charge_private()
+            get_charge_response(dict_update)
 
         time.sleep(15)
