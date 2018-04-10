@@ -32,5 +32,6 @@ def send_msg_group(sender, instance, created, **kwargs):
 post_save.connect(send_msg_group, sender=ClassRequest)
 
 class UpdateResponse(models.Model):
-    class_request_id = models.IntegerField()
+    class_request_id = models.IntegerField(null=True, blank=True)
+    class_info_id = models.IntegerField(null=True, blank=True)
     update_dict = JSONField()

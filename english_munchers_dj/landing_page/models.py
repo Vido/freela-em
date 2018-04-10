@@ -51,6 +51,8 @@ class ClassInfo(models.Model):
     q1_sent = models.DateTimeField(editable=False, blank=True, null=True)
     success = models.NullBooleanField(default=True)
 
-    # TODO
-    # Why not
-    # prof
+    q2_sent = models.DateTimeField(editable=False, blank=True, null=True)
+    q2_sent_msgid = models.IntegerField(default=0)
+    reason_why = models.TextField(blank=True, null=True)
+    proof = models.ImageField(upload_to='proof/', blank=True, null=True)
+

@@ -14,22 +14,15 @@ from landing_page.models import ClassInfo
 from telegram_bot.models import UpdateResponse
 
 from .utils import edit_bots_mgs
+from .utils import safeget
 from .confirm_class import ask_charge_private
 from .confirm_class import get_charge_response
+from .teacher_response import get_proof_response
 
 chat_id = config('TELEGRAM_CHAT_ID', cast=int)
 telegram_api_key = config('TELEGRAM_API_KEY')
 bot = telegram.Bot(telegram_api_key)
 regex_request_id = re.compile(r'I take him! ClassRequest ID: (\d+)')
-
-# TODO: Fallback value
-def safeget(dct, *keys):
-    for key in keys:
-        try:
-            dct = dct[key]
-        except KeyError:
-            return None
-    return dct
 
 def get_username(update_dict):
     _from = update_dict['callback_query']['from']
@@ -157,10 +150,17 @@ def run():
         last_update_id = last_response.update_dict['update_id']
         print('last_update_id', last_update_id)
 
+
         for update in bot.getUpdates(offset=last_update_id):
+
+            print('::::::::::::::::::::::::::::::::::::::::::::::')
+            print(update)
+            print('::::::::::::::::::::::::::::::::::::::::::::::')
+
             dict_update = update.to_dict()
             send_contact_private(dict_update)
             ask_charge_private()
             get_charge_response(dict_update)
+            get_proof_response(dict_update)
 
         time.sleep(15)

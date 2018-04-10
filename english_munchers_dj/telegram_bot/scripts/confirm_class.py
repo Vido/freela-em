@@ -51,6 +51,7 @@ regex_charge_no = re.compile(r'No, class did not happened! ClassInfo ID: (\d+)')
 
 def get_charge_response(dict_update):
     print('get_charge_response')
+
     if 'callback_query' in dict_update:
 
         yes_match = regex_charge_yes.match(dict_update['callback_query']['data'])
@@ -86,6 +87,10 @@ def get_charge_response(dict_update):
         cinfo_obj = ClassInfo.objects.get(pk=cinfo_id)
         print('success', success if success is not None else 'None')
 
+        if cinfo_obj.q2_sent is not None:
+            print('[Q2] get_charge_response')
+            return
+
         if success is not None:
             cinfo_obj.success = success
             cinfo_obj.save()
@@ -100,12 +105,43 @@ def get_charge_response(dict_update):
             from_id = dict_update['callback_query']['from']['id']
             edit_bots_mgs(bot, from_id, msg_id, msg_str)
 
+            UpdateResponse.objects.create(
+                    class_info_id=cinfo_obj.pk,
+                    update_dict=dict_update)
 
-def send_ask_why(cinfo):
+            #
+            send_ask_why(cinfo_obj, from_id)
+            send_ask_proof(cinfo_obj, chat_id)
+
+def send_ask_why(cinfo, chat_id):
     print('send_ask_why()')
 
-def send_ask_proof(cinfo):
+    if cinfo.success:
+        return
+
+    if cinfo.q2_sent is None:
+        msg_str = 'Oh! Sorry to hear about that. Why the class did not happend? (send one message)'
+        data = bot.send_message(chat_id=cinfo.chat_id, text=msg_str,
+                reply_markup=telegram.ForceReply())
+        print("DATA ++++++++++", data)
+        cinfo.q2_sent_msgid = data["message_id"]
+        cinfo.q2_sent = timezone.now()
+        cinfo.save()
+
+def send_ask_proof(cinfo, chat_id):
     print('send_ask_proof()')
+
+    if not cinfo.success:
+        return
+
+    if cinfo.q2_sent is None:
+        msg_str = 'Great. Would you mind to send me a proof? (send a screenshot from the call log).'
+        data = bot.send_message(chat_id=cinfo.chat_id, text=msg_str,
+                reply_markup=telegram.ForceReply())
+        print("DATA ++++++++++", data)
+        cinfo.q2_sent_msgid = data["message_id"]
+        cinfo.q2_sent = timezone.now()
+        cinfo.save()
 
 NO_DELAY = True
 
