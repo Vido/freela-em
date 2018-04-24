@@ -52,7 +52,8 @@ def send_contact(class_request_obj, user_id, update_dict):
         # Cria Class Request
         ClassInfo.objects.create(
                 class_request=class_request_obj,
-                chat_id=user_id)
+                chat_id=user_id,
+                teacher=get_username(update_dict))
 
     except Exception as e:
         print('Exception', e)

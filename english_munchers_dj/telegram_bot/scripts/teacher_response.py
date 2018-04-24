@@ -4,6 +4,7 @@ import datetime
 import telegram
 import sys, os, django
 
+from django.conf import settings
 from django.utils import timezone
 from decouple import config
 
@@ -37,7 +38,7 @@ def get_proof_response(dict_update):
             print('get_response - reason_why. Found')
             return
 
-        if cinfo_obj.proof is not None:
+        if bool(cinfo_obj.proof):
             print('get_response - proof. Found')
             return
 
@@ -46,13 +47,31 @@ def get_proof_response(dict_update):
             cinfo_obj.save()
             msg_str = 'Ok! Move on...'
         else:
-            # TODO: -1 pega o maior arquivo
-            telegram_file= bot.get_file(dict_update['message']['photo'][-1]['file_id'])
-            basefile = os.path.basename(telegram_file.file_path)
-            telegram_file.download(os.path.join('/', 'tmp', basefile))
-            donwload_path = os.path.join('/', 'tmp', basefile)
-            cinfo_obj.proof = donwload_path
-            msg_str = 'Great! I will analyze it soon.'
+            try:
+                proof_msg = dict_update['message']
 
+                if proof_msg['photo']:
+                    # TODO: -1 pega o maior arquivo
+                    telegram_file= bot.get_file(
+                            proof_msg['photo'][-1]['file_id'])
+                elif proof_msg['document']:
+                    telegram_file= bot.get_file(
+                            proof_msg['document']['file_id'])
+                else:
+                    raise Exception("Proof not found")
+
+            except Exception as e:
+                #IndexError: list index out of range
+                print(e)
+                return
+
+            basefile = os.path.basename(telegram_file.file_path)
+            rel_path = os.path.join('proof', basefile)
+            download_path = os.path.join(settings.MEDIA_ROOT, rel_path)
+            telegram_file.download(download_path)
+            cinfo_obj.proof.name = rel_path
+            cinfo_obj.save()
+
+            msg_str = 'Great! I will analyze it soon.'
         # send msg
         data = bot.send_message(chat_id=cinfo_obj.chat_id, text=msg_str)
