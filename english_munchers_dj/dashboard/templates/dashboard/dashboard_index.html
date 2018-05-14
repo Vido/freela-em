@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+
+        <script type="text/javascript" charset="utf8"
+src="/DataTables/datatables.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#dashboard_table').DataTable();
+            } );
+        </script>
+    </head>
+    <body>
+        <table id="dashboard_table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Details</th>
+                <th>Teacher</th>
+                <th>PVT Sent Timestamp</th>
+                <th>Student</th>
+                <th>Email student</th>
+                <th>Phone student</th>
+                <th>IP student</th>
+                <th>Class Request</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.id }}</td>
+                <td><a href="#">More+</a></td>
+                <td>{{ object.teacher }}</td>
+                <td>{{ object.pvt_send_timestamp }}</td>
+                <td>{{ object.class_request.name }}</td>
+                <td>{{ object.class_request.email}}</td>
+                <td>{{ object.class_request.phone_number }}</td>
+                <td>{{ object.class_request.ip_address }}</td>
+                <td>{{ object.class_request.created_on }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

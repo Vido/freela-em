@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'landing_page',
     'telegram_bot',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

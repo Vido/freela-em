@@ -17,10 +17,15 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('', include('landing_page.urls')),
-    path('admin/', admin.site.urls),
+    path('dashboard/', include('dashboard.urls')),
+    path('admin2/', admin.site.urls),
+    path('accounts/login/',
+        auth_views.LoginView.as_view(template_name='admin/login.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 """
