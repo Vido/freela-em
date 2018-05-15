@@ -16,24 +16,14 @@
     <tr><th>Contact sent to teacher</th><td>{{ object.pvt_send_timestamp }}</td></tr>
     <tr><th>Teacher</th><td>{{ object.teacher }}</td></tr>
     <tr><th>Successful Class</th><td>{{ object.success }}</td></tr>
-    {% if success %}
-    <tr><th>Reason why</th><td>{{ object.reason_why }}</td></tr>
-    {% else %}
-    <tr>
-        <th>Proof</th>
-        <td>
-            {% if object.proof %}
-                <img src="{{ object.proof.url }}">
-            {% else %}
-                Image not found.
-            {% endif %}
-        </td>
-    </tr>
-    {% endif %}
 </table>
 
 <h2>Invoice</h2>
 <table>
-    <tr><th>Send Invoice</th><td><a href="{% url 'classinfo_sendinvoice' object.pk %}">Send Invoice</a></td></tr>
+    <tr><th>Invoice</th><td>
+         <textarea rows="50" cols="50">{{ invoice_json }}</textarea>
+        </td></tr>
+
+        <tr><th>Confirm?</th><td><button>OK</button></td></tr>
 <table>
 
