@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'landing_page',
     'telegram_bot',
     'dashboard',
+    'paypal_integration',
 ]
 
 MIDDLEWARE = [
