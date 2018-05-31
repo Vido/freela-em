@@ -1,53 +1,60 @@
+<html>
+    <head>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 
-<h2>Class Request</h2>
-<table>
-    <tr><th>Name</th><td>{{ object.get_classrequest.name }}</td></tr>
-    <tr><th>Phone</th><td>{{ object.get_classrequest.phone_number }}</td></tr>
-    <!-- <tr><th>Country</th><td>{{ object.country }}</td></tr> -->
-    <tr><th>Email</th><td>{{ object.get_classrequest.email }}</td></tr>
-    <tr><th>Time</th><td>{{ object.get_classrequest.get_time_display }}</td></tr>
-    <tr><th>Preferred IM</th><td>{{ object.get_classrequest.get_preferred_im_display }}</td></tr>
-    <tr><th>IP Address</th><td>{{ object.get_classrequest.ip_address }}</td></tr>
-    <tr><th>Created On</th><td>{{ object.get_classrequest.created_on }}</td></tr>
-</table>
+        <script type="text/javascript" charset="utf8"
+src="/DataTables/datatables.js"></script>
 
-<h2>Class Information</h2>
-<table>
-    <tr><th>Contact sent to teacher</th><td>{{ object.get_classinfo.pvt_send_timestamp }}</td></tr>
-    <tr><th>Teacher</th><td>{{ object.get_classinfo.teacher }}</td></tr>
-    <tr><th>Successful Class</th><td>{{ object.get_classinfo.success }}</td></tr>
-    {% if not object.get_classinfo.success %}
-    <tr><th>Reason why</th><td>{{ object.get_classinfo.reason_why }}</td></tr>
-    {% else %}
-    <tr>
-        <th>Proof</th>
-        <td>
-            {% if object.get_classinfo.proof %}
-                <img src="{{ object.get_classinfo.proof.url }}">
-            {% else %}
-                Image not found.
-            {% endif %}
-        </td>
-    </tr>
-    {% endif %}
-</table>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#dashboard_table').DataTable();
+            } );
+        </script>
+    </head>
+    <body>
 
-<h2>Invoice</h2>
-<table>
-    <tr><th>ID</th><td>{{ object.invoice_id }}</td></tr>
-    <tr><th>Success</th><td>{{ object.success }}</td></tr>
-    <!--
-    {% for link in object.invoice_json.links %}
-        {% if link.rel in 'payer-view merchant-view' %}
-            <tr><th>{{ link.rel }}</th><td><a href="{{ link.href }}">{{ link.href }}</a></td></tr>
-        {% endif %}
-    {% endfor %}
-    -->
-    <tr><th>payer_view_url</th><td><a href="{{ cached_inv.metadata.payer_view_url }}">{{ object.get_invoice.metadata.payer_view_url }}</a></td></tr>
-    {% for payment in cached_inv.payments %}
-        <tr><th>Payment</th><td>{{ payment }}</td></tr>
-    {% endfor %}
-    <tr><th>Send Reminder</th><td><a href="#">Send Reminder #TODO</a></td></tr>
-    <tr><th>JSON</th><td><textarea rows=50 cols=50>{{ cached_inv }}</textarea></td></tr>
-<table>
+        <h1>Dashboard</h1>
 
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="{% url 'dashboard_index' %}">Classes</a></td>
+            <li><a href="#">Invoices</a></td>
+        </ul>
+
+        <h3>Filter</h3>
+        <ul>
+            <li><a href="?pending_invoice=true">Pending Invoices</a></li>
+            <li><a href="?new_requests=true">New Requests</a></li>
+        </ul>
+
+        <hr>
+
+        <h3>{{ object.teacher }}</h3>
+
+        <table id="dashboard_table">
+            <thead>
+            <tr>
+                <th>Class Details</th>
+                <th>Success</th>
+                <th>Invoice Details</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for cinfo_obj in classinfo_list %}
+            <tr>
+                <td><a href="{% url 'classinfo_detail' cinfo_obj.id %}">{{ cinfo_obj }}</a></td>
+                <td>{{ cinfo_obj.success }}</td>
+                {% if cinfo_obj.get_invoice %}
+                    <td><a href="{% url 'invoice_detail' cinfo_obj.get_invoice.id %}">{{ cinfo_obj.get_invoice.invoice_id }}</a></td>
+                {% else %}
+                    <td>Invoice not sent</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

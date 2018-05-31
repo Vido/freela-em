@@ -150,3 +150,7 @@ Temporary Items
 
 # vars
 envvars
+
+# vim
+*.swp
+*.swo
