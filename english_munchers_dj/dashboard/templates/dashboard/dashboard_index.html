@@ -17,6 +17,13 @@ src="/DataTables/datatables.js"></script>
 
         <h1>Dashboard</h1>
 
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="#">Classes</a></td>
+            <li><a href="{% url 'invoice_list' %}">Invoices</a></td>
+        </ul>
+
+        <h3>Filter</h3>
         <ul>
             <li><a href="?pending_invoice=true">Pending Invoices</a></li>
             <li><a href="?new_requests=true">New Requests</a></li>

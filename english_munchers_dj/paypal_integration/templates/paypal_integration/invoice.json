@@ -10,10 +10,10 @@
         },
         "address": {
             "line1": "1234 Main St.",
-            "city": "Portland",
-            "state": "OR",
+            "city": "Amparo",
+            "state": "SP",
             "postal_code": "97217",
-            "country_code": "US"
+            "country_code": "BR"
         }
     },
     "billing_info": [{"email": "em_student_br@gmail.com"}],
@@ -22,7 +22,7 @@
             "name": "Sutures",
             "quantity": 10,
             "unit_price": {
-                "currency": "USD",
+                "currency": "BRL",
                 "value": 5
             }
         }
@@ -41,16 +41,16 @@
         },
         "address": {
             "line1": "1234 Broad St.",
-            "city": "Portland",
-            "state": "OR",
+            "city": "Serra Negra",
+            "state": "SP",
             "postal_code": "97216",
-            "country_code": "US"
+            "country_code": "BR"
         }
     },
     "shipping_cost": {
         "amount": {
-            "currency": "USD",
+            "currency": "BRL",
             "value": 10
         }
     }
-})
+}

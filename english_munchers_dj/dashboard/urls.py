@@ -4,6 +4,9 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.DashboardIndex.as_view(), name='dashboard_index'),
+    url(r'invoices/$', views.InvoiceListView.as_view(), name='invoice_list'),
+    url(r'invoice/(?P<pk>[0-9]+)$', views.InvoiceDetailView.as_view(),
+        name='invoice_detail'),
     url(r'(?P<pk>[0-9]+)$', views.ClassInfoDetailView.as_view(),
         name='classinfo_detail'),
     url(r'(?P<pk>[0-9]+)/send_invoice$', views.ClassInfoSendInvoice.as_view(),

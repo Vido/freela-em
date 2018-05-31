@@ -23,7 +23,14 @@
     <tr><th>Invoice</th><td>
          <textarea rows="50" cols="50">{{ invoice_json }}</textarea>
         </td></tr>
-
-        <tr><th>Confirm?</th><td><button>OK</button></td></tr>
+        </form>
+        <tr>
+            <th>Confirm?</th>
+            <td>
+                <form method="post">{% csrf_token %}
+                    {{ form.as_p }}
+                <input type="submit" value="OK" />
+            </td>
+        </tr>
 <table>
 
