@@ -26,7 +26,6 @@ class InvoiceListView(LoginRequiredMixin, ListView):
 
 
 class TeacherListView(LoginRequiredMixin, ListView):
-    template_name = 'dashboard/teachers_list.html'
     model = Teacher
 
 
