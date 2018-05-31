@@ -1,0 +1,39 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<h2 style="margin-top:30px;">{{ object.teacher }}</h2>
+<hr>
+<div class="row" style="margin-top:30px;">
+        <table id="dashboard_table" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Class Details</th>
+                <th>Success</th>
+                <th>Invoice Details</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for cinfo_obj in classinfo_list %}
+            <tr>
+                <td><a href="{% url 'classinfo_detail' cinfo_obj.id %}">{{ cinfo_obj }}</a></td>
+                <td>{{ cinfo_obj.success }}</td>
+                {% if cinfo_obj.get_invoice %}
+                    <td><a href="{% url 'invoice_detail' cinfo_obj.get_invoice.id %}">{{ cinfo_obj.get_invoice.invoice_id }}</a></td>
+                {% else %}
+                    <td>Invoice not sent</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+{%endblock%}
+
+{%block extra_scripts%}
+<script type="text/javascript">
+    $(document).ready(function() {
+            $('#dashboard_table').DataTable();
+    } );
+</script>
+{%endblock%}

@@ -61,3 +61,13 @@ class ClassInfo(models.Model):
         self.save()
         from dashboard.models import Teacher
         teacher_obj, created = Teacher.objects.get_or_create(teacher=teacher)
+
+    def get_invoice(self):
+        from paypal_integration.models import PayPalInvoice
+        try:
+            invoice = PayPalInvoice.objects.get(class_info_id=self.id)
+        except Exception as e:
+            print('No invoice found')
+            invoice = False
+
+        return invoice
