@@ -12,6 +12,7 @@ from dashboard.models import Teacher
 from landing_page.models import ClassInfo
 from paypal_integration.models import PayPalInvoice
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, get_object_or_404, redirect
 
 
 class DashboardIndex(LoginRequiredMixin, ListView):
@@ -76,3 +77,6 @@ class ClassInfoSendInvoice(LoginRequiredMixin, UpdateView):
         context = super(ClassInfoSendInvoice, self).get_context_data(**kwargs)
         context['invoice_json'] = self.get_invoice_json()
         return context
+
+def test_view(request):
+    return render(request, "dashboard/base.html")
