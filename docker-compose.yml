@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+
+  web:
+    build: .
+    command: python english_munchers_dj/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - '8000:8000'
+    depends_on:
+     - db
+
+  db:
+    image: postgres:9.5.6-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: english123
+      POSTGRES_PASSWORD: english123
+      POSTGRES_DB: english123
