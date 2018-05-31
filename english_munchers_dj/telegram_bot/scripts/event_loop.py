@@ -50,10 +50,12 @@ def send_contact(class_request_obj, user_id, update_dict):
                 parse_mode="Markdown", disable_web_page_preview=True)
 
         # Cria Class Request
-        ClassInfo.objects.create(
+        cinfo = ClassInfo.objects.create(
                 class_request=class_request_obj,
-                chat_id=user_id,
-                teacher=get_username(update_dict))
+                chat_id=user_id)
+
+        # creates Teacher Object
+        cinfo.set_teacher(get_username(update_dict))
 
     except Exception as e:
         print('Exception', e)

@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+
+        <script type="text/javascript" charset="utf8"
+src="/DataTables/datatables.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#dashboard_table').DataTable();
+            } );
+        </script>
+    </head>
+    <body>
+
+        <h1>Dashboard</h1>
+
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="{% url 'dashboard_index' %}">Classes</a></td>
+            <li><a href="#">Invoices</a></td>
+        </ul>
+
+        <h3>Filter</h3>
+        <ul>
+            <li><a href="?pending_invoice=true">Pending Invoices</a></li>
+            <li><a href="?new_requests=true">New Requests</a></li>
+        </ul>
+
+        <hr>
+
+        <table id="dashboard_table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Details</th>
+                <th>Class id</th>
+                <th>Success</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.invoice_id }}</td>
+                <td><a href="{% url 'invoice_detail' object.pk %}">More+</a></td>
+                <td><a href="{% url 'classinfo_detail' object.class_info_id %}">{{ object.class_info_id }}</a></td>
+                <td>{{ object.success }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

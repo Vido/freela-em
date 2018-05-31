@@ -1,0 +1,53 @@
+
+<h2>Class Request</h2>
+<table>
+    <tr><th>Name</th><td>{{ object.get_classrequest.name }}</td></tr>
+    <tr><th>Phone</th><td>{{ object.get_classrequest.phone_number }}</td></tr>
+    <!-- <tr><th>Country</th><td>{{ object.country }}</td></tr> -->
+    <tr><th>Email</th><td>{{ object.get_classrequest.email }}</td></tr>
+    <tr><th>Time</th><td>{{ object.get_classrequest.get_time_display }}</td></tr>
+    <tr><th>Preferred IM</th><td>{{ object.get_classrequest.get_preferred_im_display }}</td></tr>
+    <tr><th>IP Address</th><td>{{ object.get_classrequest.ip_address }}</td></tr>
+    <tr><th>Created On</th><td>{{ object.get_classrequest.created_on }}</td></tr>
+</table>
+
+<h2>Class Information</h2>
+<table>
+    <tr><th>Contact sent to teacher</th><td>{{ object.get_classinfo.pvt_send_timestamp }}</td></tr>
+    <tr><th>Teacher</th><td>{{ object.get_classinfo.teacher }}</td></tr>
+    <tr><th>Successful Class</th><td>{{ object.get_classinfo.success }}</td></tr>
+    {% if not object.get_classinfo.success %}
+    <tr><th>Reason why</th><td>{{ object.get_classinfo.reason_why }}</td></tr>
+    {% else %}
+    <tr>
+        <th>Proof</th>
+        <td>
+            {% if object.get_classinfo.proof %}
+                <img src="{{ object.get_classinfo.proof.url }}">
+            {% else %}
+                Image not found.
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+</table>
+
+<h2>Invoice</h2>
+<table>
+    <tr><th>ID</th><td>{{ object.invoice_id }}</td></tr>
+    <tr><th>Success</th><td>{{ object.success }}</td></tr>
+    <!--
+    {% for link in object.invoice_json.links %}
+        {% if link.rel in 'payer-view merchant-view' %}
+            <tr><th>{{ link.rel }}</th><td><a href="{{ link.href }}">{{ link.href }}</a></td></tr>
+        {% endif %}
+    {% endfor %}
+    -->
+    <tr><th>payer_view_url</th><td><a href="{{ cached_inv.metadata.payer_view_url }}">{{ object.get_invoice.metadata.payer_view_url }}</a></td></tr>
+    {% for payment in cached_inv.payments %}
+        <tr><th>Payment</th><td>{{ payment }}</td></tr>
+    {% endfor %}
+    <tr><th>Send Reminder</th><td><a href="#">Send Reminder #TODO</a></td></tr>
+    <tr><th>JSON</th><td><textarea rows=50 cols=50>{{ cached_inv }}</textarea></td></tr>
+<table>
+

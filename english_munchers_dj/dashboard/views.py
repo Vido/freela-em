@@ -24,14 +24,9 @@ class InvoiceListView(LoginRequiredMixin, ListView):
     model = PayPalInvoice
 
 
-class TeachersListView(LoginRequiredMixin, ListView):
+class TeacherListView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/paypalinvoice_list.html'
     model = Teacher
-
-    #def get_context_data(self, **kwargs):
-    #    context = super(InvoiceDetailView, self).get_context_data(**kwargs)
-    #    context['teachers_list'] = self.object.get_invoice()
-    #    return context
 
 
 class InvoiceDetailView(LoginRequiredMixin, DetailView):
@@ -41,6 +36,15 @@ class InvoiceDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(InvoiceDetailView, self).get_context_data(**kwargs)
         context['cached_inv'] = self.object.get_invoice()
+        return context
+
+
+class TeacherDetailView(LoginRequiredMixin, DetailView):
+    model = Teacher
+
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceDetailView, self).get_context_data(**kwargs)
+        context['classinfo_list'] = self.object.get_classes()
         return context
 
 

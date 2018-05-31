@@ -56,3 +56,8 @@ class ClassInfo(models.Model):
     reason_why = models.TextField(blank=True, null=True)
     proof = models.ImageField(upload_to='proof/', max_length=512, blank=True, null=True)
 
+    def set_teacher(self, teacher):
+        self.teacher = teacher
+        self.save()
+        from dashboard.models import Teacher
+        teacher_obj, created = Teacher.objects.get_or_create(teacher=teacher)
