@@ -1,37 +1,14 @@
-<html>
-    <head>
-        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-
-        <script type="text/javascript" charset="utf8"
-src="/DataTables/datatables.js"></script>
-
-        <script type="text/javascript">
-            $(document).ready(function() {
-                    $('#dashboard_table').DataTable();
-            } );
-        </script>
-    </head>
-    <body>
-
-        <h1>Dashboard</h1>
-
-        <h3>Navigation</h3>
-        <ul>
-            <li><a href="{% url 'dashboard_index' %}">Classes</a></td>
-            <li><a href="#">Invoices</a></td>
-        </ul>
-
-        <h3>Filter</h3>
-        <ul>
-            <li><a href="?pending_invoice=true">Pending Invoices</a></li>
-            <li><a href="?new_requests=true">New Requests</a></li>
-        </ul>
-
-        <hr>
-
-        <table id="dashboard_table">
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<h3 style="margin-top:30px;">Teachers</h3>
+<hr>
+<h4>Filtering</h4>
+<a href="?pending_invoice=true"><button type="button" name="button">Pending Invoices</button></a>
+<a href="?new_requests=true"><button type="button" name="button">New Requests</button></a>
+<hr/>
+<div class="row" style="margin-top:30px;">
+        <table id="dashboard_table" class="table table-striped">
             <thead>
             <tr>
                 <th>id</th>
@@ -48,5 +25,13 @@ src="/DataTables/datatables.js"></script>
             {% endfor %}
             </tbody>
         </table>
-    </body>
-</html>
+      </div>
+{%endblock%}
+
+{%block extra_scripts%}
+<script type="text/javascript">
+    $(document).ready(function() {
+            $('#dashboard_table').DataTable();
+    } );
+</script>
+{%endblock%}
