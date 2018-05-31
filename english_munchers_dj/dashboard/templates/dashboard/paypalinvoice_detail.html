@@ -1,6 +1,9 @@
-
-<h2>Class Request</h2>
-<table>
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<h2 style="margin-top:30px;">Class Request</h2>
+<hr>
+<table style="margin-top:30px;">
     <tr><th>Name</th><td>{{ object.get_classrequest.name }}</td></tr>
     <tr><th>Phone</th><td>{{ object.get_classrequest.phone_number }}</td></tr>
     <!-- <tr><th>Country</th><td>{{ object.country }}</td></tr> -->
@@ -11,8 +14,9 @@
     <tr><th>Created On</th><td>{{ object.get_classrequest.created_on }}</td></tr>
 </table>
 
-<h2>Class Information</h2>
-<table>
+<h2 style="margin-top:60px;">Class Information</h2>
+<hr>
+<table style="margin-top:30px;">
     <tr><th>Contact sent to teacher</th><td>{{ object.get_classinfo.pvt_send_timestamp }}</td></tr>
     <tr><th>Teacher</th><td>{{ object.get_classinfo.teacher }}</td></tr>
     <tr><th>Successful Class</th><td>{{ object.get_classinfo.success }}</td></tr>
@@ -32,8 +36,9 @@
     {% endif %}
 </table>
 
-<h2>Invoice</h2>
-<table>
+<h2 style="margin-top:60px;">Invoice</h2>
+<hr>
+<table style="margin-top:30px;">
     <tr><th>ID</th><td>{{ object.invoice_id }}</td></tr>
     <tr><th>Success</th><td>{{ object.success }}</td></tr>
     <!--
@@ -50,4 +55,3 @@
     <tr><th>Send Reminder</th><td><a href="#">Send Reminder #TODO</a></td></tr>
     <tr><th>JSON</th><td><textarea rows=50 cols=50>{{ cached_inv }}</textarea></td></tr>
 <table>
-

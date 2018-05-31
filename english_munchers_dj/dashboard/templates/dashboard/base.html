@@ -13,13 +13,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/dashboard/?pending_invoice=true">Pending Invoices</a>
+          <a class="nav-link" href="{% url 'dashboard_index'%}">Classes</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="/dashboard/?new_requests=true">New Requests</a>
+          <a class="nav-link" href="{% url 'invoice_list' %}">Invoices</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="#">Teachers</a>
+          <a class="nav-link" href="{% url 'teacher_list' %}">Teachers</a>
         </li>
       </ul>
 

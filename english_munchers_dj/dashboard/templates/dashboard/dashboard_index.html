@@ -1,7 +1,11 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
-<h3 style="margin-top:30px;">Pending Invoices</h3>
+<h3 style="margin-top:30px;">Pending Classes</h3>
+<hr>
+<h4>Filtering</h4>
+<a href="?pending_invoice=true"><button type="button" name="button">Pending Invoices</button></a>
+<a href="?new_requests=true"><button type="button" name="button">New Requests</button></a>
 <hr/>
 <div class="row" style="margin-top:30px;">
         <table id="dashboard_table" class="table table-striped">
