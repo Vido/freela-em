@@ -8,4 +8,5 @@ urlpatterns = [
         name='classinfo_detail'),
     url(r'(?P<pk>[0-9]+)/send_invoice$', views.ClassInfoSendInvoice.as_view(),
         name='classinfo_sendinvoice'),
+    url(r'^base/', views.test_view, name='test_view'),
 ]

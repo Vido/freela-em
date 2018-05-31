@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'landing_page',
-    'telegram_bot',
+    # 'telegram_bot',
     'dashboard',
     'paypal_integration',
 ]
