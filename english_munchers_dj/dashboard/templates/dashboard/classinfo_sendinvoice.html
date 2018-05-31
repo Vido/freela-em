@@ -1,29 +1,41 @@
-
-<h2>Class Request</h2>
-<table>
-    <tr><th>Name</th><td>{{ object.class_request.name }}</td></tr>
-    <tr><th>Phone</th><td>{{ object.class_request.phone_number }}</td></tr>
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<h2 style="margin-top:30px;">Class Request</h2>
+<hr>
+<table style="margin-top:30px;">
+    <tr><th>Name: </th><td>{{ object.class_request.name }}</td></tr>
+    <tr><th>Phone: </th><td>{{ object.class_request.phone_number }}</td></tr>
     <!-- <tr><th>Country</th><td>{{ object.country }}</td></tr> -->
-    <tr><th>Email</th><td>{{ object.class_request.email }}</td></tr>
-    <tr><th>Time</th><td>{{ object.class_request.get_time_display }}</td></tr>
-    <tr><th>Preferred IM</th><td>{{ object.class_request.get_preferred_im_display }}</td></tr>
-    <tr><th>IP Address</th><td>{{ object.class_request.ip_address }}</td></tr>
-    <tr><th>Created On</th><td>{{ object.class_request.created_on }}</td></tr>
+    <tr><th>Email: </th><td>{{ object.class_request.email }}</td></tr>
+    <tr><th>Time: </th><td>{{ object.class_request.get_time_display }}</td></tr>
+    <tr><th>Preferred IM: </th><td>{{ object.class_request.get_preferred_im_display }}</td></tr>
+    <tr><th>IP Address: </th><td>{{ object.class_request.ip_address }}</td></tr>
+    <tr><th>Created On: </th><td>{{ object.class_request.created_on }}</td></tr>
 </table>
 
-<h2>Class Information</h2>
-<table>
-    <tr><th>Contact sent to teacher</th><td>{{ object.pvt_send_timestamp }}</td></tr>
-    <tr><th>Teacher</th><td>{{ object.teacher }}</td></tr>
-    <tr><th>Successful Class</th><td>{{ object.success }}</td></tr>
+<h2 style="margin-top:60px;">Class Information</h2>
+<hr>
+<table style="margin-top:30px;">
+    <tr><th>Contact sent to teacher: </th><td>{{ object.pvt_send_timestamp }}</td></tr>
+    <tr><th>Teacher: </th><td>{{ object.teacher }}</td></tr>
+    <tr><th>Successful Class: </th><td>{{ object.success }}</td></tr>
 </table>
 
-<h2>Invoice</h2>
-<table>
-    <tr><th>Invoice</th><td>
+<h2 style="margin-top:60px;">Invoice</h2>
+<hr>
+<table style="margin-top:30px;">
+    <tr><th>Invoice: </th><td>
          <textarea rows="50" cols="50">{{ invoice_json }}</textarea>
         </td></tr>
-
-        <tr><th>Confirm?</th><td><button>OK</button></td></tr>
+        </form>
+        <tr>
+            <th>Confirm?</th>
+            <td>
+                <form method="post">{% csrf_token %}
+                    {{ form.as_p }}
+                <input type="submit" value="OK" class="btn btn-success"/>
+            </td>
+        </tr>
 <table>
-
+{%endblock%}
