@@ -4,8 +4,16 @@
 <h3 style="margin-top:30px;">Pending Classes</h3>
 <hr>
 <h4>Filtering</h4>
-<a href="?pending_invoice=true"><button type="button" name="button">Pending Invoices</button></a>
-<a href="?new_requests=true"><button type="button" name="button">New Requests</button></a>
+<div class="row">
+<div class="col-md-9">
+  <a href="?pending_invoice=true"><button type="button" name="button">Pending Invoices</button></a>
+  <a href="?new_requests=true"><button type="button" name="button">New Requests</button></a>
+</div>
+<div class="col-md-3" style="float:right;">
+  <input type="date" name="" value="" id="date">
+  <input type="submit" name="" value="Filter" id="date_filter">
+</div>
+</div>
 <hr/>
 <div class="row" style="margin-top:30px;">
         <table id="dashboard_table" class="table table-striped">
@@ -47,4 +55,12 @@
             $('#dashboard_table').DataTable();
     } );
 </script>
+<script type="text/javascript">
+  $("#date_filter").click(function (){
+    alert($("#date").val());
+    // FILTER SHOULD COME RIGHT HERE!
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css"/>
 {%endblock%}
