@@ -22,19 +22,31 @@
     <tr><th>Successful Class: </th><td>{{ object.success }}</td></tr>
     {% if success %}
     <tr><th>Reason why: </th><td>{{ object.reason_why }}</td></tr>
+    </table>
     {% else %}
-    <tr>
-        <th>Proof</th>
-        <td>
-            {% if object.proof %}
-                <img src="{{ object.proof.url }}">
-            {% else %}
-                Image not found.
-            {% endif %}
-        </td>
-    </tr>
+    </table>
+    <div id="accordion">
+    <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Proof
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+        {% if object.proof %}
+            <img src="{{ object.proof.url }}">
+        {% else %}
+            Image not found.
+        {% endif %}
+      </div>
+    </div>
+    </div>
+    </div>
     {% endif %}
-</table>
 
 <h2 style="margin-top:60px;">Invoice</h2>
 <hr>

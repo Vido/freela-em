@@ -10,9 +10,11 @@
   <a href="?new_requests=true"><button type="button" name="button">New Requests</button></a>
 </div>
 <div class="col-md-3" style="float:right;">
-  <input type="date" name="" value="" id="date_start">
-  <input type="date" name="" value="" id="date_end">
-  <input type="submit" name="" value="Filter" id="date_filter">
+  <form action="." method="get">
+    <input type="date" name="date_start" value="" id="date_start">
+    <input type="date" name="date_end" value="" id="date_end">
+    <input type="submit" name="" value="Filter" id="date_filter">
+  </form>
 </div>
 </div>
 <hr/>
@@ -41,13 +43,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
             $('#dashboard_table').DataTable();
+            $("#date_start").val(get("date_start"));
+            $("#date_end").val(get("date_end"));
+
     } );
-</script>
-<script type="text/javascript">
-  $("#date_filter").click(function (){
-    alert($("#date_start").val());
-    alert($("#date_end").val());
-    // FILTER SHOULD COME RIGHT HERE!
-  });
 </script>
 {%endblock%}
