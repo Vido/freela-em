@@ -5,15 +5,15 @@
 <hr>
 <h4>Filtering</h4>
 <div class="row">
-<div class="col-md-9">
+<div class="col-md-5">
   <a href="?pending_invoice=true"><button type="button" name="button">Pending Invoices</button></a>
   <a href="?new_requests=true"><button type="button" name="button">New Requests</button></a>
 </div>
-<div class="col-md-3" style="float:right;">
+<div class="col-md-7" style="float:right;display:inline;">
   <form action="." method="get">
-    <input type="date" name="date_start" value="" id="date_start">
-    <input type="date" name="date_end" value="" id="date_end">
-    <input type="submit" name="" value="Filter" id="date_filter">
+    Initial date: <input type="date" name="date_start" value="" id="date_start">
+    Ending date: <input type="date" name="date_end" value="" id="date_end" >
+    <input type="submit" name="" value="Filter" id="date_filter" >
   </form>
 </div>
 </div>
