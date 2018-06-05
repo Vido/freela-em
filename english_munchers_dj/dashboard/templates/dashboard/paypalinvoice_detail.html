@@ -20,21 +20,33 @@
     <tr><th>Contact sent to teacher</th><td>{{ object.get_classinfo.pvt_send_timestamp }}</td></tr>
     <tr><th>Teacher</th><td>{{ object.get_classinfo.teacher }}</td></tr>
     <tr><th>Successful Class</th><td>{{ object.get_classinfo.success }}</td></tr>
-    {% if not object.get_classinfo.success %}
-    <tr><th>Reason why</th><td>{{ object.get_classinfo.reason_why }}</td></tr>
-    {% else %}
-    <tr>
-        <th>Proof</th>
-        <td>
-            {% if object.get_classinfo.proof %}
-                <img src="{{ object.get_classinfo.proof.url }}">
-            {% else %}
-                Image not found.
-            {% endif %}
-        </td>
-    </tr>
-    {% endif %}
+    {% if success %}
+    <tr><th>Reason why: </th><td>{{ object.reason_why }}</td></tr>
 </table>
+{% else %}
+</table>
+<div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Proof
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+        {% if object.get_classinfo.proof %}
+            <img src="{{ object.get_classinfo.proof.url }}">
+        {% else %}
+            Image not found.
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <h2 style="margin-top:60px;">Invoice</h2>
 <hr>
