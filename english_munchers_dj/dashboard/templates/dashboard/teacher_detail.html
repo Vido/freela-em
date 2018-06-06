@@ -1,7 +1,21 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
-<h2 style="margin-top:30px;">{{ object.teacher }}</h2>
+<h3 style="margin-top:30px;">{{ object.teacher }}</h3>
+<hr>
+<h4>Filtering</h4>
+<div class="row">
+<div class="col-md-5">
+  <a href="?pending_invoice=true"><button type="button" name="button">Pending Invoices</button></a>
+</div>
+<div class="col-md-7" style="float:right;display:inline;">
+  <form action="" method="get">
+    Initial date: <input type="date" name="date_start" value="" id="date_start">
+    Ending date: <input type="date" name="date_end" value="" id="date_end" >
+    <input type="submit" name="" value="Filter" id="date_filter" >
+  </form>
+</div>
+</div>
 <hr>
 <div class="row" style="margin-top:30px;">
         <table id="dashboard_table" class="table table-striped">
@@ -10,6 +24,7 @@
                 <th>Class Details</th>
                 <th>Success</th>
                 <th>Invoice Details</th>
+                <th>Invoice timestamp</th>
             </tr>
             </thead>
 
@@ -20,8 +35,10 @@
                 <td>{{ cinfo_obj.success }}</td>
                 {% if cinfo_obj.get_invoice %}
                     <td><a href="{% url 'invoice_detail' cinfo_obj.get_invoice.id %}">{{ cinfo_obj.get_invoice.invoice_id }}</a></td>
+                    <td>{{ cinfo_obj.get_invoice.created_on }}</td>
                 {% else %}
                     <td>Invoice not sent</td>
+                    <td>N/A</td>
                 {% endif %}
             </tr>
             {% endfor %}
@@ -34,6 +51,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
             $('#dashboard_table').DataTable();
+            $("#date_start").val(get("date_start"));
+            $("#date_end").val(get("date_end"));
     } );
 </script>
 {%endblock%}

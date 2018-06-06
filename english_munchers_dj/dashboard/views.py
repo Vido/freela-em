@@ -19,11 +19,38 @@ class DashboardIndex(LoginRequiredMixin, ListView):
     template_name = 'dashboard/dashboard_index.html'
     model = ClassInfo
 
+    def get_queryset(self, **kwargs):
+        qs = super(DashboardIndex, self).get_queryset(**kwargs)
+
+        initial_date = self.request.GET.get('date_start', '')
+        final_date = self.request.GET.get('date_end', '')
+
+        if initial_date:
+            qs = qs.filter(pvt_send_timestamp__gte=initial_date)
+
+        if final_date:
+            qs = qs.filter(pvt_send_timestamp__lte=final_date)
+
+        return qs
+
 
 class InvoiceListView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/paypalinvoice_list.html'
     model = PayPalInvoice
 
+    def get_queryset(self, **kwargs):
+        qs = super(InvoiceListView, self).get_queryset(**kwargs)
+
+        initial_date = self.request.GET.get('date_start', '')
+        final_date = self.request.GET.get('date_end', '')
+
+        if initial_date:
+            qs = qs.filter(created_on__gte=initial_date)
+
+        if final_date:
+            qs = qs.filter(final_on__gte=final_date)
+
+        return qs
 
 class TeacherListView(LoginRequiredMixin, ListView):
     model = Teacher
@@ -44,7 +71,14 @@ class TeacherDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TeacherDetailView, self).get_context_data(**kwargs)
-        context['classinfo_list'] = self.object.get_classes()
+
+        initial_date = self.request.GET.get('date_start', None)
+        final_date = self.request.GET.get('date_end', None)
+
+        context['classinfo_list'] = self.object.get_classes(
+                initial_date=initial_date,
+                final_date=final_date)
+
         return context
 
 
