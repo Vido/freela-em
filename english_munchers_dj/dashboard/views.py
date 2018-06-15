@@ -25,11 +25,24 @@ class DashboardIndex(LoginRequiredMixin, ListView):
         initial_date = self.request.GET.get('date_start', '')
         final_date = self.request.GET.get('date_end', '')
 
+        pending_invoices = self.request.GET.get('pending_invoices', False)
+        success = self.request.GET.get('success', None)
+
         if initial_date:
             qs = qs.filter(pvt_send_timestamp__gte=initial_date)
 
         if final_date:
             qs = qs.filter(pvt_send_timestamp__lte=final_date)
+
+        if success is not None:
+            qs = qs.filter(success=success)
+
+        if pending_invoices:
+            qs = []
+            for obj in qs:
+                invoice = obj.get_invoice()
+                if not invoice:
+                    qs.append(obj)
 
         return qs
 
