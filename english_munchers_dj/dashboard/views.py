@@ -35,7 +35,9 @@ class DashboardIndex(LoginRequiredMixin, ListView):
             qs = qs.filter(pvt_send_timestamp__lte=final_date)
 
         if success is not None:
-            qs = qs.filter(success=success)
+            bool_dict = {'true': True, 'false': False}
+            bool_success = bool_dict.get(success.lower(), False)
+            qs = qs.filter(success=bool_success)
 
         if pending_invoices:
             qs = []
