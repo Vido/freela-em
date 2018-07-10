@@ -56,6 +56,10 @@ class ClassInfo(models.Model):
     reason_why = models.TextField(blank=True, null=True)
     proof = models.ImageField(upload_to='proof/', max_length=512, blank=True, null=True)
 
+    q3_sent = models.DateTimeField(editable=False, blank=True, null=True)
+    q3_sent_msgid = models.IntegerField(default=0)
+    class_length = models.CharField(max_length=128, default='', blank=True, null=True)
+
     def set_teacher(self, teacher):
         self.teacher = teacher
         self.save()

@@ -134,13 +134,30 @@ def send_ask_proof(cinfo, chat_id):
         return
 
     if cinfo.q2_sent is None:
-        msg_str = 'Great. Would you mind to send me a proof? (send a screenshot from the call log).'
+        msg_str = 'Great! Would you mind to send me a proof? (send a screenshot from the call log).'
         data = bot.send_message(chat_id=cinfo.chat_id, text=msg_str,
                 reply_markup=telegram.ForceReply())
         print("DATA ++++++++++", data)
         cinfo.q2_sent_msgid = data["message_id"]
         cinfo.q2_sent = timezone.now()
         cinfo.save()
+
+def send_ask_lenght(cinfo, chat_id):
+    print('send_ask_lenght()')
+
+    if not cinfo.proof:
+        print('[  ] send_ask_lenght: bool(cinfo.proof) = False')
+        return
+
+    if cinfo.q3_sent is None:
+        msg_str = 'How long did the class take? (write the number of minutes).'
+        data = bot.send_message(chat_id=cinfo.chat_id, text=msg_str,
+                reply_markup=telegram.ForceReply())
+        print("DATA ++++++++++", data)
+        cinfo.q3_sent_msgid = data["message_id"]
+        cinfo.q3_sent = timezone.now()
+        cinfo.save()
+
 
 NO_DELAY = True
 

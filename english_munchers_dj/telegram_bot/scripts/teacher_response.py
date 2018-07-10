@@ -12,22 +12,20 @@ from telegram_bot.models import UpdateResponse
 from landing_page.models import ClassRequest
 from landing_page.models import ClassInfo
 from .utils import safeget
+from .utils import get_cinfo
 
 
 chat_id = config('TELEGRAM_CHAT_ID', cast=int)
 telegram_api_key = config('TELEGRAM_API_KEY')
 bot = telegram.Bot(telegram_api_key)
 
+
 def get_proof_response(dict_update):
     print('get_response')
 
     msgid = safeget(dict_update, 'message', 'reply_to_message', 'message_id')
     teacher_id = safeget(dict_update, 'message', 'from', 'id')
-
-    cinfo_list = ClassInfo.objects.filter(
-            q2_sent_msgid__isnull=False, chat_id=teacher_id).exclude(
-            q2_sent_msgid=0)
-    cinfo_obj = cinfo_list.last()
+    cinfo_obj = get_cinfo(dict_update)
 
     if msgid is not None:
         original = UpdateResponse.objects.filter(
@@ -45,7 +43,11 @@ def get_proof_response(dict_update):
         if not cinfo_obj.success:
             cinfo_obj.reason_why = safeget(dict_update, 'message', 'text')
             cinfo_obj.save()
-            msg_str = 'Ok! Move on...'
+            msg_str = 'Ok! Keep calm and carry on...'
+
+            # send msg
+            data = bot.send_message(chat_id=cinfo_obj.chat_id, text=msg_str)
+
         else:
             try:
                 proof_msg = dict_update['message']
@@ -72,6 +74,37 @@ def get_proof_response(dict_update):
             cinfo_obj.proof.name = rel_path
             cinfo_obj.save()
 
+            print('################################ - send_ask_lenght')
+            # class_lengh -> only if class was success
+            from .confirm_class import send_ask_lenght
+            send_ask_lenght(cinfo_obj, chat_id)
+
+            # TUDO pode dar problema
+            #msg_str = 'Great! I will analyze it soon.'
+
+
+def get_classlength_response(dict_update):
+
+    print('get_classlength_response')
+    msgid = safeget(dict_update, 'message', 'reply_to_message', 'message_id')
+    cinfo_obj = get_cinfo(dict_update)
+
+    if cinfo_obj is None:
+        print('[cinfo] get_classlength_response -> is None')
+        return
+
+    reply_msg = safeget(dict_update, 'message', 'reply_to_message', 'text')
+    if not 'How long did' in reply_msg:
+        print('get_proof_response - Wrong msg')
+        return
+
+    if cinfo_obj.q3_sent is None:
+        print('[Q3] get_classlength_response -> Q3 not sent')
+        return
+
+    if msgid is not None:
+        if not cinfo_obj.class_length:
+            cinfo_obj.class_length = safeget(dict_update, 'message', 'text')
+            cinfo_obj.save()
             msg_str = 'Great! I will analyze it soon.'
-        # send msg
-        data = bot.send_message(chat_id=cinfo_obj.chat_id, text=msg_str)
+            data = bot.send_message(chat_id=cinfo_obj.chat_id, text=msg_str)

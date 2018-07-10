@@ -18,6 +18,7 @@ from .utils import safeget
 from .confirm_class import ask_charge_private
 from .confirm_class import get_charge_response
 from .teacher_response import get_proof_response
+from .teacher_response import get_classlength_response
 
 chat_id = config('TELEGRAM_CHAT_ID', cast=int)
 telegram_api_key = config('TELEGRAM_API_KEY')
@@ -165,5 +166,8 @@ def run():
             ask_charge_private()
             get_charge_response(dict_update)
             get_proof_response(dict_update)
+
+            #send_ask_lenght()
+            get_classlength_response(dict_update)
 
         time.sleep(15)
