@@ -1,52 +1,8 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
 {% block content %}
-<h2 style="margin-top:30px;">Class Request</h2>
-<hr>
-<table style="margin-top:30px;">
-    <tr><th>Name</th><td>{{ object.get_classrequest.name }}</td></tr>
-    <tr><th>Phone</th><td>{{ object.get_classrequest.phone_number }}</td></tr>
-    <!-- <tr><th>Country</th><td>{{ object.country }}</td></tr> -->
-    <tr><th>Email</th><td>{{ object.get_classrequest.email }}</td></tr>
-    <tr><th>Time</th><td>{{ object.get_classrequest.get_time_display }}</td></tr>
-    <tr><th>Preferred IM</th><td>{{ object.get_classrequest.get_preferred_im_display }}</td></tr>
-    <tr><th>IP Address</th><td>{{ object.get_classrequest.ip_address }}</td></tr>
-    <tr><th>Created On</th><td>{{ object.get_classrequest.created_on }}</td></tr>
-</table>
 
-<h2 style="margin-top:60px;">Class Information</h2>
-<hr>
-<table style="margin-top:30px;">
-    <tr><th>Contact sent to teacher</th><td>{{ object.get_classinfo.pvt_send_timestamp }}</td></tr>
-    <tr><th>Teacher</th><td>{{ object.get_classinfo.teacher }}</td></tr>
-    <tr><th>Successful Class</th><td>{{ object.get_classinfo.success }}</td></tr>
-    {% if success %}
-    <tr><th>Reason why: </th><td>{{ object.reason_why }}</td></tr>
-</table>
-{% else %}
-</table>
-<div id="accordion">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h5 class="mb-0">
-        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Proof
-        </button>
-      </h5>
-    </div>
-
-    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-      <div class="card-body">
-        {% if object.get_classinfo.proof %}
-            <img src="{{ object.get_classinfo.proof.url }}">
-        {% else %}
-            Image not found.
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
+{% include 'dashboard/cinfo_include.html' %}
 
 <h2 style="margin-top:60px;">Invoice</h2>
 <hr>

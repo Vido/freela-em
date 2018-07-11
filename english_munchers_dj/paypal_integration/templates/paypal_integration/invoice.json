@@ -1,12 +1,12 @@
 {
     "merchant_info": {
         "email": "emacc@gmail.com",
-        "first_name": "Dennis",
-        "last_name": "Doctor",
-        "business_name": "Medical Professionals, LLC",
+        "first_name": "Bruce",
+        "last_name": "Welmrink",
+        "business_name": "English Munchers - ME",
         "phone": {
-            "country_code": "001",
-            "national_number": "5032141716"
+            "country_code": "055",
+            "national_number": "11977375553"
         },
         "address": {
             "line1": "1234 Main St.",
@@ -19,38 +19,16 @@
     "billing_info": [{"email": "em_student_br@gmail.com"}],
     "items": [
         {
-            "name": "Sutures",
-            "quantity": 10,
+            "name": "English Class",
+            "quantity": 1,
             "unit_price": {
                 "currency": "BRL",
-                "value": 5
+                "value": 10
             }
         }
     ],
-    "note": "Medical Invoice 16 Jul, 2013 PST",
+    "note": "English Munchers Online Classes",
     "payment_term": {
         "term_type": "NET_45"
-    },
-    "shipping_info": {
-        "first_name": "Sally",
-        "last_name": "Patient",
-        "business_name": "Not applicable",
-        "phone": {
-            "country_code": "001",
-            "national_number": "5039871234"
-        },
-        "address": {
-            "line1": "1234 Broad St.",
-            "city": "Serra Negra",
-            "state": "SP",
-            "postal_code": "97216",
-            "country_code": "BR"
-        }
-    },
-    "shipping_cost": {
-        "amount": {
-            "currency": "BRL",
-            "value": 10
-        }
     }
 }

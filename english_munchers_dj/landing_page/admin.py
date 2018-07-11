@@ -13,7 +13,7 @@ class ClassRequestAdmin(admin.ModelAdmin):
 class ClassInfoAdmin(admin.ModelAdmin):
     list_display = ('id', 'teacher', 'pvt_send_timestamp')
     fields = ('class_request', 'teacher', 'chat_id',
-            'success', 'reason_why', 'proof')
+            'success', 'reason_why', 'class_length', 'proof')
 
 
 admin.autodiscover()

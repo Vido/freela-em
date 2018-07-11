@@ -7,6 +7,12 @@ class Teacher(models.Model):
     created_on = models.DateTimeField(editable=False, auto_now_add=True)
     teacher = models.CharField(max_length=128, default='', unique=True)
 
+    def __str__(self):
+        try:
+            return self.teacher
+        except:
+            return super(Teacher, self).__str__()
+
     def get_classes(self, success=None, initial_date=None, final_date=None):
         from landing_page.models import ClassInfo
         qs_classinfo = ClassInfo.objects.filter(teacher=self.teacher)
