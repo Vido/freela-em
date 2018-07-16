@@ -24,7 +24,7 @@ class ClassRequest(models.Model):
         message="Phone Number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
     country = models.CharField(max_length=32)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(blank=False, null=True)
     time = models.CharField(max_length=8, choices=TIME_CHOICES, default='open')
     preferred_im = models.CharField(max_length=16, choices=IM_CHOICES, default='whatsapp')
     ip_address = models.GenericIPAddressField()
