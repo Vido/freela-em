@@ -20,10 +20,10 @@
     "items": [
         {
             "name": "English Class",
-            "quantity": 1,
+            "quantity": {{ quant }},
             "unit_price": {
                 "currency": "BRL",
-                "value": 10
+                "value": {{ price }}
             }
         }
     ],

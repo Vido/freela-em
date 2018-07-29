@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-{% include 'dashboard/cinfo_include.html' %}
+{% include 'dashboard/cinfo_include.html' with object=object.get_classinfo %}
 
 <h2 style="margin-top:60px;">Invoice</h2>
 <hr>
@@ -20,7 +20,8 @@
     {% for payment in cached_inv.payments %}
         <tr><th>Payment</th><td>{{ payment }}</td></tr>
     {% endfor %}
-    <tr><th>Send Reminder</th><td><a href="#">Send Reminder #TODO</a></td></tr>
+    <!-- <tr><th>Send Reminder</th><td><a href="#">Send Reminder
+        #TODO</a></td></tr> -->
     <tr><th>JSON</th><td><textarea rows=50 cols=50>{{ cached_inv }}</textarea></td></tr>
 <table>
 {%endblock%}

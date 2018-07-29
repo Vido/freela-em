@@ -1,14 +1,19 @@
 import json
+import math
 
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from django.views.generic import UpdateView
+from django.views.generic import FormView
 from django.template import Template, Context
 from django.template.loader import render_to_string
 
 from django.urls import reverse
 
 from dashboard.models import Teacher
+from dashboard.models import Teacher
+from dashboard.forms import InvoiceForm
+
 from landing_page.models import ClassInfo
 from paypal_integration.models import PayPalInvoice
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -102,28 +107,74 @@ class ClassInfoDetailView(LoginRequiredMixin, DetailView):
     model = ClassInfo
 
 
-class ClassInfoSendInvoice(LoginRequiredMixin, UpdateView):
+class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
     template_name = 'dashboard/classinfo_sendinvoice.html'
-    model = ClassInfo
     fields = ['teacher']
+    form_class = InvoiceForm
+
+    def get_object(self, i):
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        ClassInfo.objects.get(id=self.kwargs['id'])
+
+    def get_object(self):
+        queryset = ClassInfo.objects.all()
+        pk = self.kwargs.get('pk', None)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+        else:
+            raise AttributeError("Generic detail view %s must be called with "
+                                 "either an object pk or a slug."
+                                 % self.__class__.__name__)
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
 
     def get_success_url(self):
         return reverse('dashboard_index')
 
+    def get_initial(self):
+        try:
+            obj = self.get_object()
+            quant = math.ceil(float(obj.class_length)/15.0)
+        except:
+            quant = 0
+
+        context = {
+            'quant': quant,
+            'price': 10,
+        }
+
+        return context
+
     def form_valid(self, form):
-        from paypal_integration.views import send_invoice
         invoice_dict = json.loads(self.get_invoice_json())
-        send_invoice(invoice_dict, self.object.pk)
+        self.paypal_invoice_send(invoice_dict, self.object.pk)
         return super().form_valid(form)
 
-    def get_invoice_json(self):
-        invoice_json = render_to_string('paypal_integration/invoice.json', {})
+    def paypal_invoice_send(self, invoice_dict):
+        from paypal_integration.views import send_invoice
+        r = send_invoice(invoice_dict, self.object.pk)
+        return r
+
+    def get_invoice_json(self, quant, prive):
+        context = {
+                'quant': quant,
+                'price': price,
+        }
+        invoice_json = render_to_string('paypal_integration/invoice.json',
+                context)
         print(invoice_json)
         return invoice_json
 
     def get_context_data(self, **kwargs):
         context = super(ClassInfoSendInvoice, self).get_context_data(**kwargs)
-        context['invoice_json'] = self.get_invoice_json()
+        obj = self.get_object()
+        context['object'] = obj
+        context['cached_inv'] = obj.get_invoice()
         return context
 
 def test_view(request):
