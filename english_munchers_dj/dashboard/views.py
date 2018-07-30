@@ -163,7 +163,7 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
         r = send_invoice(invoice_dict, self.object.pk)
         return r
 
-    def get_invoice_json(self, quant, prive):
+    def get_invoice_json(self, quant, price):
         context = {
                 'quant': quant,
                 'price': price,
