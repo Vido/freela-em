@@ -112,10 +112,6 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
     fields = ['teacher']
     form_class = InvoiceForm
 
-    def get_object(self, i):
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        ClassInfo.objects.get(id=self.kwargs['id'])
-
     def get_object(self):
         queryset = ClassInfo.objects.all()
         pk = self.kwargs.get('pk', None)
@@ -153,14 +149,16 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         price = form.cleaned_data['price']
         quant = form.cleaned_data['quant']
+        pk = self.kwargs.get('pk', None)
+
         invoice_dict = json.loads(
                 self.get_invoice_json(quant, price))
-        self.paypal_invoice_send(invoice_dict, self.object.pk)
+        self.paypal_invoice_send(invoice_dict, pk)
         return super().form_valid(form)
 
-    def paypal_invoice_send(self, invoice_dict):
+    def paypal_invoice_send(self, invoice_dict, pk):
         from paypal_integration.views import send_invoice
-        r = send_invoice(invoice_dict, self.object.pk)
+        r = send_invoice(invoice_dict, pk)
         return r
 
     def get_invoice_json(self, quant, price):
