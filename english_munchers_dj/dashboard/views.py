@@ -151,7 +151,10 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
         return context
 
     def form_valid(self, form):
-        invoice_dict = json.loads(self.get_invoice_json())
+        price = form.cleaned_data['price']
+        quant = form.cleaned_data['quant']
+        invoice_dict = json.loads(
+                self.get_invoice_json(quant, price))
         self.paypal_invoice_send(invoice_dict, self.object.pk)
         return super().form_valid(form)
 
