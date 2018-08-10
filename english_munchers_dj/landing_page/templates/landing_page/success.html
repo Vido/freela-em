@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'landing_page/favicon.ico' %}">
+    <title>Practice English Conversation - English Munchers</title>
+
+    <meta name="description" content="Practice English Conversation Is your schedule too busy or too crazy to have English classes? Try our services.">
+    <meta name="keywords" content="English Conversation">
+
+    <link rel="apple-touch-icon" href="{% static 'landing_page/images/touch/apple-touch-icon.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'landing_page/images/touch/apple-touch-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'landing_page/images/touch/apple-touch-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'landing_page/images/touch/apple-touch-icon-144x144.png' %}">
+
+    <meta property="og:title" content="Practice English Conversation - English Munchers">
+    <meta property="og:description" content="Practice English Conversation Is your schedule too busy or too crazy to have English classes? Try our services.">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="address=no">
+
+    <link rel="stylesheet" href="{% static 'landing_page/css/style.css' %}">
+    <script src="https://use.fontawesome.com/4ded3e6bc4.js"></script>
+    <link rel="stylesheet" href="{% static 'landing_page/css/intlTelInput.css' %}">
+    <!--[if lt IE 9]>
+        <script src="{% static 'landing_page/js/html5.js' %}"></script>
+        <script src="{% static 'landing_page/js/respond.js' %}"></script>
+    <![endif]-->
+
+    <style>
+        header {
+            padding: 104px 0;
+            background: url(/static/landing_page/images/happy.jpg) no-repeat
+                -50% 60%;
+            font: 24px/36px $fontCaption;
+            color: black;
+            @include bgsize;
+            @include sizing;
+            h1 {
+                font-size: 60px;
+                line-height: 60px;
+                font-weight: $f-medium;
+                margin-bottom: 38px;
+                span {
+                    font-weight: $f-extra-light;
+                }
+            }
+            .autor {
+                padding: 12px 0 0;
+                font-size: 14px;
+                line-height: 24px;
+                font-weight: bold;
+                color: $white;
+                a {
+                    color: $white;
+                    &:hover {
+                        color: $white;
+                        @include opacity(0.8);
+                    }
+                    &:active {
+                        color: $white;
+                        @include opacity(1);
+                    }
+                }
+            }
+            .buttons-wrapper {
+                padding-top: 53px;
+                .button-stripe {
+                    margin-left: 14px;
+                }
+            }
+        }
+    </style>
+
+</head>
+
+<body class="no-js">
+    <div class="main">
+        <header>
+            <div class="wrap">
+                <!-- <img src="{% static 'landing_page/upload/iPhoneEM.png' %}" height="532" width="252" alt="" class="header-img"> -->
+                <div class="header-wrapper">
+                    <h1>Success!</h1>
+                    <p>A teacher will contact you in 5 minutes</p>
+                    <div class="buttons-wrapper">
+                        <a href="/" class="button button-stripe">Learn more</a>
+                    </div>
+                </div>
+                <!-- /.header-wrapper -->
+            </div>
+            <!-- /.wrap -->
+        </header>
+        <footer>
+            <div class="wrap">
+                <p>&copy; 2017 <strong>English Munchers</strong>, All Rights Reserved</p>
+            </div>
+            <!-- /.wrap -->
+        </footer>
+    </div>
+
+    <script src="{% static 'landing_page/js/jquery.js' %}"></script>
+    <script src="{% static 'landing_page/js/library.js' %}"></script>
+    <script src="{% static 'landing_page/js/script.js' %}"></script>
+    <script src="{% static 'landing_page/js/retina.js' %}"></script>
+    <script src="{% static 'landing_page/js/intlTelInput.js' %}"></script>
+
+    <script>
+      $("#id_phone_number").intlTelInput({
+          initialCountry: "auto",
+          geoIpLookup: function(callback) {
+            $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+              var countryCode = (resp && resp.country) ? resp.country : "";
+              console.log(countryCode);
+              callback(countryCode);
+            });
+          },
+          utilsScript: "{% static 'landing_page/js/utils.js' %}" // just for formatting/placeholders etc
+        });
+    </script>
+
+</body>
+</html>
