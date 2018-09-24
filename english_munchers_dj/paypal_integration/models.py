@@ -21,3 +21,12 @@ class PayPalInvoice(models.Model):
         from . import sandbox
         inv = Invoice.find(self.invoice_id)
         return inv
+
+class InvoiceWrapper():
+    def __init__(self, invoice):
+        self.inv = invoice
+        print(self.inv)
+        print(invoice)
+
+    def get_payer_view_url(self):
+        return self.inv.metadata.payer_view_url

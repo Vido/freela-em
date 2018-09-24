@@ -1,7 +1,5 @@
 from django.db import models
-
-# Create your models here.
-
+from django.urls import reverse
 
 class Teacher(models.Model):
     created_on = models.DateTimeField(editable=False, auto_now_add=True)
@@ -12,6 +10,9 @@ class Teacher(models.Model):
             return self.teacher
         except:
             return super(Teacher, self).__str__()
+
+    def get_absolute_url(self):
+        return reverse('teacher_detail', kwargs={'pk': self.pk})
 
     def get_classes(self, success=None, initial_date=None, final_date=None):
         from landing_page.models import ClassInfo

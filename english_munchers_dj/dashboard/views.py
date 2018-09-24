@@ -16,6 +16,7 @@ from dashboard.forms import InvoiceForm
 
 from landing_page.models import ClassInfo
 from paypal_integration.models import PayPalInvoice
+from paypal_integration.models import InvoiceWrapper
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -83,6 +84,7 @@ class InvoiceDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(InvoiceDetailView, self).get_context_data(**kwargs)
         context['cached_inv'] = self.object.get_invoice()
+        context['cached_wrp'] = InvoiceWrapper(context['cached_inv'])
         return context
 
 
@@ -176,6 +178,7 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
         obj = self.get_object()
         context['object'] = obj
         context['cached_inv'] = obj.get_invoice()
+        context['cached_wrp'] = InvoiceWrapper(context['cached_inv'])
         return context
 
 def test_view(request):

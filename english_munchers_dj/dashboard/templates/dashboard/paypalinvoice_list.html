@@ -26,6 +26,7 @@
                 <th>Details</th>
                 <th>Class id</th>
                 <th>Success</th>
+                <th>Timestamp</th>
             </tr>
             </thead>
 
@@ -36,6 +37,7 @@
                 <td><a href="{% url 'invoice_detail' object.pk %}">More+</a></td>
                 <td><a href="{% url 'classinfo_detail' object.class_info_id %}">{{ object.class_info_id }}</a></td>
                 <td>{{ object.success }}</td>
+                <td>{{ object.created_on }}</td>
             </tr>
             {% endfor %}
             </tbody>

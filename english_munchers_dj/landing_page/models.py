@@ -66,6 +66,16 @@ class ClassInfo(models.Model):
         from dashboard.models import Teacher
         teacher_obj, created = Teacher.objects.get_or_create(teacher=teacher)
 
+    def get_teacher(self):
+        from dashboard.models import Teacher
+        try:
+            obj = Teacher.objects.get(teacher=self.teacher)
+            return obj
+        except:
+            pass
+
+        return ''
+
     def get_invoice(self):
         from paypal_integration.models import PayPalInvoice
         try:

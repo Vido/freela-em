@@ -4,8 +4,9 @@
 
 {% include 'dashboard/cinfo_include.html' with object=object.get_classinfo %}
 
-<h2 style="margin-top:60px;">Invoice</h2>
+<h2 style="margin-top:60px;">Invoice Details</h2>
 <hr>
+
 <table style="margin-top:30px;">
     <tr><th>ID</th><td>{{ object.invoice_id }}</td></tr>
     <tr><th>Success</th><td>{{ object.success }}</td></tr>
@@ -16,12 +17,51 @@
         {% endif %}
     {% endfor %}
     -->
-    <tr><th>payer_view_url</th><td><a href="{{ cached_inv.metadata.payer_view_url }}">{{ object.get_invoice.metadata.payer_view_url }}</a></td></tr>
+    {% if cached_wrp.get_payer_view_url %}
+            <tr><th>Payment status:</th><td>Pending...</td></tr>
+        <tr><th>payer_view_url</th><td><a href="{{ cached_inv.metadata.payer_view_url }}">{{ object.get_invoice.metadata.payer_view_url }}</a></td></tr>
+    {% endif %}
+</table>
+
+<table style="margin-top:30px;">
     {% for payment in cached_inv.payments %}
-        <tr><th>Payment</th><td>{{ payment }}</td></tr>
+        {% if payment %}
+            <tr><th>Payment status:</th><td>FOUND!</td></tr>
+        {% else %}
+            <tr><th>Payment status:</th><td>PAYPAL RESPONSE NOT FOUND!</td></tr>
+        {% endif %}
+
+        {% if payment.amount %}
+            <tr><th>Payment amount:</th><td>{{ payment.amount.value }}</td></tr>
+            <tr><th>Currency:</th><td>{{ payment.amount.currency }}</td></tr>
+            <tr><th>Date:</th><td>{{ payment.date }}</td></tr>
+        {% endif %}
     {% endfor %}
-    <!-- <tr><th>Send Reminder</th><td><a href="#">Send Reminder
-        #TODO</a></td></tr> -->
-    <tr><th>JSON</th><td><textarea rows=50 cols=50>{{ cached_inv }}</textarea></td></tr>
-<table>
-{%endblock%}
+</table>
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse"
+                                             data-target="#collapseTwo"
+                                             aria-expanded="true"
+                                             aria-controls="collapseTwo">
+                Techinical Info
+                </button>
+            </h5>
+        </div>
+
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+            <table style="margin-top:30px;">
+            {% for payment in cached_inv.payments %}
+                <tr><th>Payment Info</th><td>{{ payment }}</td></tr>
+            {% endfor %}
+            <tr><th>JSON</th><td><textarea rows=50 cols=50>{{ cached_inv }}</textarea></td></tr>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

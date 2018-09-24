@@ -15,7 +15,13 @@
 <hr>
 <table style="margin-top:30px;">
     <tr><th>Contact sent to teacher: </th><td>{{ object.pvt_send_timestamp }}</td></tr>
+    {% if object.get_teacher %}
+    <tr><th>Teacher: </th><td>
+            <a href="{{ object.get_teacher.get_absolute_url }}">{{ object.teacher }}</a>
+    </td></tr>
+    {% else %}
     <tr><th>Teacher: </th><td>{{ object.teacher }}</td></tr>
+    {% endif %}
     <tr><th>Successful Class: </th><td>{{ object.success }}</td></tr>
     {% if object.success %}
         <tr><th>Class Length: </th><td>{{ object.class_length }}</td></tr>
