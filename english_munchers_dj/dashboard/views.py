@@ -11,10 +11,11 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from dashboard.models import Teacher
-from dashboard.models import Teacher
 from dashboard.forms import InvoiceForm
 
 from landing_page.models import ClassInfo
+from landing_page.models import Prices
+
 from paypal_integration.models import PayPalInvoice
 from paypal_integration.models import InvoiceWrapper
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -195,6 +196,25 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
         context['cached_inv'] = obj.get_invoice()
         context['cached_wrp'] = InvoiceWrapper(context['cached_inv'])
         return context
+
+
+class PricesFormView(LoginRequiredMixin, UpdateView):
+    template_name = 'dashboard/prices_form.html'
+    model = Prices
+    fields = ['config']
+
+    def get_object(self):
+        queryset = Prices.objects.all()
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
+
+    def get_success_url(self):
+        return reverse('price_form')
 
 def test_view(request):
     return render(request, "dashboard/base.html")

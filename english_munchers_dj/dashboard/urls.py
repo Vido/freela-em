@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'teacher/(?P<pk>[0-9]+)$', views.TeacherDetailView.as_view(),
         name='teacher_detail'),
 
+    url(r'prices/$', views.PricesFormView.as_view(), name='price_form'),
+
     url(r'(?P<pk>[0-9]+)$', views.ClassInfoDetailView.as_view(),
         name='classinfo_detail'),
     url(r'(?P<pk>[0-9]+)/send_invoice$', views.ClassInfoSendInvoice.as_view(),
