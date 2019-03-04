@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.forms import ModelForm
 
 from landing_page.models import ClassRequest
+from landing_page.models import Prices
 
 class ClassRequestForm(ModelForm):
     class Meta:
@@ -22,6 +23,11 @@ class IndexView(FormView):
         class_request_obj.save()
         return super(IndexView, self).form_valid(form)
 
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['price_table'] = Prices.objects.all().get()
+        return context
 
 class SuccessView(TemplateView):
     template_name = "landing_page/success.html"

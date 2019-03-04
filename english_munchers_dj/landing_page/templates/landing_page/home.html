@@ -88,11 +88,13 @@
                         <p>You Complete Your Information</p>
                         <p>Click On The Number of Minutes you Want</p>
                         <ul style="margin-top: 1rem; list-style: square; margin-left: 1rem">
-                            <li>15 minutes - <strong>R$ 10</strong></li>
-                            <li>30 minutes - <strong>R$ 20</strong></li>
-                            <li>45 minutes - <strong>R$ 30</strong></li>
-                            <li>60 minutes - <strong>R$ 40</strong></li>
-                            <li>Open Time - charged by the minute, starting at 15 minutes</li>
+                            {% for line in price_table.config %}
+                                {% if forloop.last %}
+                                    <li>{{ line.0 }} - {{ line.1 }}</li>
+                                {% else %}
+                                    <li>{{ line.0 }} - <strong>{{ line.1 }}</strong></li>
+                                {% endif %}
+                            {% endfor %}
                         </ul>
                         <p style="margin-top: 1rem;">Once you submit your
                         request, a teacher will contact you within<br><strong>3

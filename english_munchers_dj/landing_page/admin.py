@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import ClassRequest
 from .models import ClassInfo
+from .models import Prices
 
 @admin.register(ClassRequest)
 class ClassRequestAdmin(admin.ModelAdmin):
@@ -15,5 +16,7 @@ class ClassInfoAdmin(admin.ModelAdmin):
     fields = ('class_request', 'teacher', 'chat_id',
             'success', 'reason_why', 'class_length', 'proof')
 
+
+admin.site.register(Prices)
 
 admin.autodiscover()

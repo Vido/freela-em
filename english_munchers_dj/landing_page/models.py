@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from django.contrib.postgres.fields import JSONField
 
 TIME_CHOICES = (
     ('15', _('15 minutes')),
@@ -85,3 +86,20 @@ class ClassInfo(models.Model):
             invoice = False
 
         return invoice
+
+
+PRICE_CHOICES = (
+    (_('15 minutes'), 'R$10'),
+    (_('30 minutes'), 'R$20'),
+    (_('45 minutes'), 'R$30'),
+    (_('60 minutes'), 'R$40'),
+    (_('Open Time'), 'charged by the minute, starting at 15 minutes.'),
+)
+
+
+class Prices(models.Model):
+
+    config = JSONField(null=True, blank=True, default=PRICE_CHOICES)
+
+    def __str__(self):
+        return 'Config Object'
