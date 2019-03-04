@@ -151,17 +151,32 @@ class ClassInfoSendInvoice(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         price = form.cleaned_data['price']
         quant = form.cleaned_data['quant']
+        gateway = form.cleaned_data['gateway']
         pk = self.kwargs.get('pk', None)
 
         invoice_dict = json.loads(
                 self.get_invoice_json(quant, price))
+
+        # TODO: Habilitar selecao
         self.paypal_invoice_send(invoice_dict, pk)
+
+        #if gateway == 'Paypal':
+        #    self.paypal_invoice_send(invoice_dict, pk)
+        #elif gateway == '':
+        #    self.pagseguro_invoice_send(invoice_dict, pk)
+
         return super().form_valid(form)
 
     def paypal_invoice_send(self, invoice_dict, pk):
         from paypal_integration.views import send_invoice
         r = send_invoice(invoice_dict, pk)
         return r
+
+    def pagseguro_invoice_send(self, invoice_dict, pk):
+        from pagseguro_integration.views import send_invoice
+        r = send_invoice(invoice_dict, pk)
+        return r
+
 
     def get_invoice_json(self, quant, price):
         context = {
