@@ -34,19 +34,19 @@ def send_ask_charge(cinfo):
         telegram.InlineKeyboardButton('Yes',
             callback_data='Yes, the class was given! ClassInfo ID: %d' % cinfo.id),
         telegram.InlineKeyboardButton('No',
-            callback_data='No, class did not happened! ClassInfo ID: %d' % cinfo.id)
+            callback_data='No, class did not happen! ClassInfo ID: %d' % cinfo.id)
     ]
 
     reply_markup = telegram.InlineKeyboardMarkup(
             build_menu(button_list, n_cols=2))
-    msg_str = 'Hi %s. Did you gave the class to student %s?' % (cinfo.teacher, cinfo.class_request.name)
+    msg_str = 'Hi %s. Did you give the class to student %s?' % (cinfo.teacher, cinfo.class_request.name)
     bot.send_message(chat_id=cinfo.chat_id, text=msg_str, reply_markup=reply_markup)
 
     cinfo.q1_sent = timezone.now()
     cinfo.save()
 
 regex_charge_yes = re.compile(r'Yes, the class was given! ClassInfo ID: (\d+)')
-regex_charge_no = re.compile(r'No, class did not happened! ClassInfo ID: (\d+)')
+regex_charge_no = re.compile(r'No, class did not happen! ClassInfo ID: (\d+)')
 
 def get_charge_response(dict_update):
     print('get_charge_response')
@@ -98,7 +98,7 @@ def get_charge_response(dict_update):
             #print('** dict_update', dict_update)
             msg_id = dict_update['callback_query']['message']['message_id']
             print('msg_id', msg_id)
-            msg_str = 'Hi %s. Did you gave the class to student %s? You anwser: %s' % (
+            msg_str = 'Hi %s. Did you give the class to student %s? You anwser: %s' % (
                     cinfo_obj.teacher, cinfo_obj.class_request.name,
                     'YES' if success else 'NO')
             from_id = dict_update['callback_query']['from']['id']
@@ -119,7 +119,7 @@ def send_ask_why(cinfo, chat_id):
         return
 
     if cinfo.q2_sent is None:
-        msg_str = 'Oh! Sorry to hear about that. Why the class did not happend? (send one message)'
+        msg_str = 'Oh! Sorry to hear about that. Why the class did not happen? (send one message)'
         data = bot.send_message(chat_id=cinfo.chat_id, text=msg_str,
                 reply_markup=telegram.ForceReply())
         print("DATA ++++++++++", data)
